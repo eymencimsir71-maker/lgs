@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>LGS Soru Defteri</title>
+<meta name="theme-color" content="#7c5cff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LGS">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#fff8f0;--sf:#ffffff;--ink:#2d2a4a;--mut:#7a7594;--line:#ebe4f5;--red:#ef476f;--ok:#06a77d;--hl:#ffe69a;--acc:#7c5cff;--acc2:#ff8a5c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1a2e;--sf:#27244a;--ink:#f1eefc;--mut:#a7a2c7;--line:#3a3562;--red:#ff7b97;--ok:#4fd1a5;--hl:#5a4a1a;--acc:#a48cff;--acc2:#ff9d7a}}
+:root[data-theme="dark"]{--bg:#1c1a2e;--sf:#27244a;--ink:#f1eefc;--mut:#a7a2c7;--line:#3a3562;--red:#ff7b97;--ok:#4fd1a5;--hl:#5a4a1a;--acc:#a48cff;--acc2:#ff9d7a}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:linear-gradient(120deg,var(--acc),var(--acc2));color:#fff;padding:22px 16px 20px;border-radius:0 0 22px 22px}
+header h1{max-width:860px;margin:0 auto;font-size:1.4em;font-weight:700}
+header p{max-width:860px;margin:4px auto 0;color:rgba(255,255,255,.88);font-size:.92em}
+nav{display:flex;gap:8px;max-width:860px;margin:14px auto 0;padding:0 16px;overflow-x:auto}
+nav button{background:var(--sf);border:1px solid var(--line);color:var(--ink);font:inherit;padding:7px 14px;border-radius:999px;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+main{max-width:860px;margin:0 auto;padding:18px 16px 48px}
+.box{background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(124,92,255,.07)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mut{color:var(--mut)}
+.big{font-size:2em;font-weight:700;color:var(--acc)}
+.btn{border:none;background:var(--acc);color:#fff;font:inherit;padding:9px 18px;border-radius:999px;cursor:pointer;font-weight:600}
+.btn.o{background:var(--sf);color:var(--acc);border:1px solid var(--acc)}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.link{background:none;border:none;color:var(--mut);text-decoration:underline;padding:4px}
+.list{display:grid;gap:8px}
+.item{display:block;width:100%;text-align:left;background:var(--sf);color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--acc);border-radius:14px;padding:12px 14px;font:inherit;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.04);transition:transform .15s,box-shadow .15s}
+.item:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(124,92,255,.15)}
+.bar{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:999px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.tag{display:inline-block;background:var(--hl);color:var(--ink);padding:2px 10px;border-radius:999px;font-size:.78em}
+.metin{border-left:4px solid var(--acc2);background:rgba(255,138,92,.08);border-radius:0 10px 10px 0;padding:8px 14px;margin:10px 0;white-space:pre-wrap}
+.opt{display:block;width:100%;text-align:left;background:var(--sf);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:7px;font:inherit;cursor:pointer}
+.opt:hover{border-color:var(--acc);background:rgba(124,92,255,.07)}
+.opt.sel{background:rgba(124,92,255,.15);border-color:var(--acc)}
+.opt.ok{background:var(--ok);color:#fff;border-color:var(--ok)}
+.opt.no{background:var(--red);color:#fff;border-color:var(--red)}
+.exp{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;color:var(--ink)}
+.hide{display:none}
+input,select{font:inherit;color:var(--ink);background:var(--sf);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+input{flex:1}
+.done{text-decoration:line-through;color:var(--mut)}
+.center{text-align:center}
+textarea.note{width:100%;margin-top:10px;font:inherit;color:var(--ink);background:var(--sf);border:1px dashed var(--line);border-radius:10px;padding:8px;resize:vertical}
+</style>
+</head>
+<body>
+<header>
+  <h1>LGS Soru Defteri</h1>
+  <p>Yeni nesil sorular, ders çalışması ve LGS simülesi</p>
+</header>
+<nav id="nav"></nav>
+<main id="v"></main>
+<script>
+const D={"Türkçe":"#b03a2e","Matematik":"#2f5d9e","Fen Bilimleri":"#2e7d4f","İnkılap Tarihi":"#9a6b12","Din Kültürü":"#1f6f6f","İngilizce":"#7a4a7a"};
+
+// Simülasyon dağılımı (toplam 90 soru)
+const SIM_COUNT={"Türkçe":20,"Matematik":20,"Fen Bilimleri":20,"İnkılap Tarihi":10,"Din Kültürü":10,"İngilizce":10};
+const SIM_TOTAL=Object.values(SIM_COUNT).reduce((a,b)=>a+b,0);
+const SIM_MIN=135;
+
+// LGS yeni nesil bankası: [ders, metin, soru, şıklar, doğru, açıklama, konu]
+const Q=[
+/* ================= TÜRKÇE (40) ================= */
+["Türkçe","Bir köyde yaşlı bir adam her sabah aynı yola çıkar, yol kenarındaki fidanları sular, sonra dönerdi. Köylüler “Bu ağaçların gölgesinde sen oturamayacaksın” dediğinde gülümseyip “Ben de başkalarının diktiği ağaçların gölgesinde oturdum” derdi.","Yaşlı adamın bu davranışının temel nedeni aşağıdakilerden hangisidir?",["Kendi çıkarını gözetmek","Sonraki nesillere fayda sağlamak","Köylülerin takdirini kazanmak","Boş vakti değerlendirmek"],1,"Adam, kendisinin yararlanmayacağı ağaçları gelecek nesiller için dikiyor.","Paragraf – ana düşünce"],
+["Türkçe","“Okuduğum kitaplar bana yalnızca bilgi vermedi; farklı hayatlara girip başka gözlerle bakabilmeyi de öğretti.”","Bu cümleden aşağıdakilerden hangisi çıkarılamaz?",["Okumanın yararı yalnızca bilgi edinmektir.","Okumak bakış açısını geliştirebilir.","Kitaplar başkalarını anlamaya yardım edebilir.","Anlatıcı kitaplardan bilgi dışında da kazanç sağlamıştır."],0,"“Yalnızca bilgi vermedi” ifadesi okumanın bilgiden fazlasını sağladığını söyler.","Paragraf – anlam çıkarma"],
+["Türkçe","Bir sanat eserinin değeri, kaç kişinin beğendiğiyle değil, bıraktığı izle ölçülür.","Parçanın ana düşüncesi aşağıdakilerden hangisidir?",["Sanat eserleri çok beğenilmelidir.","Eserin değeri beğeni sayısıyla belirlenir.","Bir eserin değeri bıraktığı etkiyle anlaşılır.","Sanatçılar kalabalıklara göre üretmelidir."],2,"Metin, değeri beğeni sayısı yerine bırakılan etkide arıyor.","Paragraf – ana düşünce"],
+["Türkçe","Kütüphanenin kapısı açıldığında eski kâğıtların kokusu her yere sinmişti.","Bu cümlede hangi duyuya yer verilmiştir?",["Görme","Koku","Tat","Dokunma"],1,"“Kokusu” ifadesi koku duyusuna dayanır.","Anlatım biçimleri"],
+["Türkçe","Tarlasını yıllardır sürmeyen çiftçi, toprağın yorulduğunu söylerken bile umudunu kaybetmemişti; ona göre toprak yeniden canlanmayı unutmazdı.","Yazar çiftçiyi nasıl tanıtmıştır?",["Tembel ve ümitsiz","Sabırlı ve umutlu","Bilgisiz ve kararsız","Öfkeli ve kıskanç"],1,"Çiftçinin toprağa güvenmesi sabırlı ve umutlu bir karakteri gösterir.","Paragraf – anlam çıkarma"],
+["Türkçe","Bu kitap bir çocuk masalı gibi başlar, ama sonunda hayatın zorlukları hakkında ağır sorular sorar.","Bu cümlelerden hangisi çıkarılabilir?",["Kitap yalnızca çocuklara hitap eder.","Kitabın dili yetişkinlere uygun değildir.","Kitap, masal kılığında ciddi konulara değinir.","Kitabın sonu mutlu bitmektedir."],2,"Metin, masal görünümlü bir eserin ciddi konulara değindiğini söyler.","Paragraf – anlam çıkarma"],
+["Türkçe","Yazar, romanında geçmişi anlatırken sık sık bugüne döner; böylece okur, olayların nedenlerini kendi zihninde birleştirir.","Yazar hangi anlatım tekniğini kullanmıştır?",["Geriye dönüş","Betimleme","Diyalog","Karşılaştırma"],0,"Geçmişe gidip yeniden bugüne dönen anlatım geriye dönüştür.","Anlatım biçimleri"],
+["Türkçe","Kelimeler kullanıldıkları bağlamda anlam kazanır; “yüksek” sözcüğü bir binada yükseklik, bir sesde ise şiddet anlamına gelebilir.","Bu metinden sözcük anlamıyla ilgili hangi bilgiye ulaşılır?",["Sözcükler her zaman sabit anlam taşır.","Sözcüğün anlamı kullanıldığı bağlama göre değişir.","“Yüksek” sözcüğü yalnızca ses için kullanılır.","Bağlam anlamı hiçbir zaman değiştirmez."],1,"Metin, anlamın bağlama göre değiştiğini örnekle gösteriyor.","Sözcükte anlam"],
+["Türkçe","Bir öğrenci sınavdan önce notlarını tekrar etmek yerine konuları birbirine bağlamaya çalışırsa, bilgi daha kalıcı olur.","Metne göre kalıcı öğrenmeyi sağlayan şey nedir?",["Notları ezberlemek","Konuları birbiriyle ilişkilendirmek","Sınav saatinde çalışmak","Kısa sürede çok soru çözmek"],1,"Metin, konular arasında bağ kurmanın öğrenmeyi kalıcı kıldığını söyler.","Paragraf – anlam çıkarma"],
+["Türkçe","Şehir hayatının koşuşturması içinde insanlar birbirine yabancılaşmış görünebilir. ____ bu yabancılık, dayanışmanın gerekliliğini de artırır.","Boşluğa en uygun bağlaç hangisidir?",["Ancak","Yani","Çünkü","Ve"],0,"Cümle olumsuz bir duruma karşı bir karşıt düşünce getirdiği için “ancak” uygundur.","Dil bilgisi – bağlaçlar ve cümle öğeleri"],
+["Türkçe","Bu deneme yazısında yazar, teknolojinin hayatı kolaylaştırdığını kabul etmekle birlikte insanlar arasındaki bağın zayıfladığını savunuyor.","Yazarın bakış açısı nasıl ifade edilebilir?",["Teknolojiyi tamamen reddediyor.","Faydasını kabul edip olumsuz etkisine dikkat çekiyor.","Teknolojinin hiçbir yararı olmadığını söylüyor.","Teknolojinin bağları güçlendirdiğini savunuyor."],1,"Yazar hem faydayı kabul ediyor hem de bağların zayıflamasına dikkat çekiyor.","Paragraf – yazarın tutumu"],
+["Türkçe","Dedesi her akşam aynı hikâyeyi anlatırdı; her seferinde biraz değişir, yeni bir ayrıntıyla zenginleşirdi.","Bu cümlelerden hangisi çıkarılamaz?",["Hikâye her anlatışta farklılaşıyordu.","Dedenin anlattığı hikâye yenilikler içeriyordu.","Anlatılan hikâye tamamen aynı kalıyordu.","Dede hikâyeyi düzenli olarak tekrarlardı."],2,"Metin hikâyenin her anlatımda değiştiğini söylüyor.","Paragraf – anlam çıkarma"],
+["Türkçe","Ölçü ve tartıda hassas olan bir zanaatkâr, malzemesini tanır ve her adımda sabırla ilerler.","Metinde zanaatkârın hangi özelliği öne çıkarılmıştır?",["Aceleci ve plansız","Hassas ve sabırlı","Tembel ve dağınık","Kendini beğenmiş"],1,"Metin, zanaatkârın hassas olduğunu ve sabırla çalıştığını anlatır.","Paragraf – anlam çıkarma"],
+["Türkçe","Öğrenciler yalnızca sonucu değil süreci de değerlendirirse, başarısızlık bir son olmaktan çıkar, öğrenmenin bir parçası hâline gelir.","Metinde hangi görüş savunulmaktadır?",["Sonuç her zaman önemlidir.","Başarısızlık öğrenmenin bir parçası olabilir.","Süreç değerlendirilmemelidir.","Öğrenciler sınavlardan uzak durmalıdır."],1,"Sürecin değerlendirilmesiyle başarısızlık öğretici hâle gelebilir.","Paragraf – ana düşünce"],
+["Türkçe","Köy yolunun iki yanına dizilmiş kavaklar, rüzgârda sanki bir selam verir gibi eğiliyordu.","Bu cümlede hangi söz sanatı kullanılmıştır?",["Benzetme","Kişileştirme","Abartma","Tezat"],1,"Ağaçların selam vermesi, cansız varlığa insan özelliği verildiğini gösterir.","Söz sanatları"],
+["Türkçe","Haberi okurken kaynağını sorgulamayan okur, yanlış bilgiyle kolayca yönlendirilebilir.","Metne göre okur nasıl davranmalıdır?",["Haberleri hiç okumamalıdır.","Haberlerin kaynağını sorgulamalıdır.","Her haberi olduğu gibi kabul etmelidir.","Yalnızca yerel haberleri takip etmelidir."],1,"Metin, kaynağı sorgulamanın yanıltıcı bilgilere karşı koruduğunu söyler.","Paragraf – anlam çıkarma"],
+["Türkçe","Bir kral, halkının sesini duymak için her hafta kapısını açarmış. Bir gün bir dilenci gelip “Sizin altınlarınız mı değerli, yoksa sözleriniz mi?” diye sormuş.","Dilencinin sorusu aşağıdakilerden hangisini vurgulamaktadır?",["Altının değeri","Sözün ve dürüstlüğün değeri","Kralın zenginliği","Dilencinin ihtiyacı"],1,"Soru, değerin maddi varlıklardan çok söz ve dürüstlükte olabileceğini düşündürür.","Paragraf – ana düşünce"],
+["Türkçe","Göl, rüzgârsız günlerde dingin bir ayna gibiydi.","Metinde geçen “dingin” sözcüğünün anlamca en yakın karşılığı hangisidir?",["Sakin","Hızlı","Karanlık","Kalabalık"],0,"“Dingin”, durgun ve sakin anlamına gelir.","Sözcükte anlam"],
+["Türkçe","“Damlaya damlaya göl olur.”","Bu atasözü hangi düşünceyi anlatır?",["Acele iş şeytan işidir.","Küçük birikimler zamanla büyük sonuç verir.","Sabır acıdır.","Her işte başarı şanstır."],1,"Küçük şeylerin birikerek büyük sonuç vermesini anlatır.","Atasözleri ve deyimler"],
+["Türkçe","Yazar, şiirde kullandığı imgelerle okurun zihninde canlı görüntüler oluşturmayı amaçlamıştır.","Metne göre yazarın amacı nedir?",["Okuru bilgilendirmek","Zihinde canlı görüntüler oluşturmak","Okuru eleştirmek","Ders vermek"],1,"Metin, imgelerin amacının canlı görüntüler oluşturmak olduğunu söyler.","Paragraf – yazarın tutumu"],
+["Türkçe","Başarılı bir paragrafın konusu bellidir ve her cümle bu konuyu destekler.","Bu cümleye göre iyi bir paragrafta hangi özellik olmalıdır?",["Konu dağınık olmalı","Cümleler konuyu desteklemeli","Cümle sayısı çok olmalı","Yazar kendinden bahsetmeli"],1,"Metne göre paragraftaki her cümle konuyu desteklemelidir.","Paragraf – ana düşünce"],
+["Türkçe","Ev sahibi, konuklarına ikram etmeyi bir görev değil, sevincini paylaşma biçimi olarak görürdü.","Ev sahibinin misafirperverliğiyle ilgili metinden hangisi çıkarılabilir?",["Misafirperverliği bir zorunluluk sayar.","İkramı sevinçle yapar.","Konukları sevmez.","İkramdan kaçınır."],1,"Metin, ikramın sevinçle yapıldığını anlatır.","Paragraf – anlam çıkarma"],
+["Türkçe","Mehmet, yazın büyükannesinin köyüne gitti. Orada tarlada çalışmayı, akşamları ateş başında hikâye dinlemeyi çok sevdi.","Mehmet'in yaz tatilindeki en belirgin duygusu nedir?",["Sıkıntı","Mutluluk","Korku","Kızgınlık"],1,"Metin, Mehmet'in köyde yaptığı şeyleri sevdiğini anlatır.","Paragraf – anlam çıkarma"],
+["Türkçe","Yolcu, treni kaçırdığını fark edince koşarak istasyona yetişmeye çalıştı; ama kapılar çoktan kapanmıştı.","Bu parçada hangi anlatım biçimi ağırlıklıdır?",["Öyküleme","Tartışma","Betimleme","Açıklama"],0,"Olay sırasıyla anlatıldığı için öyküleme ağırlıklıdır.","Anlatım biçimleri"],
+["Türkçe","Şair, ilk dizede kendini bir kuşa benzetir; ikinci dizede ise kendi kendine konuşur.","Bu cümlede hangi söz sanatı vardır?",["Benzetme","Kişileştirme","Tezat","Abartma"],0,"“Kendini bir kuşa benzetir” ifadesi benzetmedir.","Söz sanatları"],
+["Türkçe","Erkenden uyandım; fakat yağmur yüzünden okula yürüyerek gidemedim.","Cümlede kullanılan “fakat” bağlacı hangi anlam ilişkisini kurar?",["Neden–sonuç","Karşıtlık","Ekleme","Amaç"],1,"İki cümle arasında karşıt bir durum vardır.","Dil bilgisi – bağlaçlar ve cümle öğeleri"],
+["Türkçe","Aşağıdaki cümlelerin hangisinde virgül kullanımı yanlıştır?",null,["Ali, Ayşe, Can geldi.","Sabah erkenden, kalktım.","Mehmet, arkadaşına kitap verdi.","Dışarıda yağmur yağıyordu."],1,"Zaman zarfından sonra özne ile yüklem arasına virgül konmaz.","Yazım ve noktalama"],
+["Türkçe","Aşağıdaki sözcüklerin hangisi yanlış yazılmıştır?",null,["Hiçbir","Herkez","Bugün","Yarın"],1,"Doğrusu “herkes”tir.","Yazım ve noktalama"],
+["Türkçe","“Kedi hızlıca koştu.” cümlesindeki “hızlıca” sözcüğü hangi sözcük türündedir?",null,["İsim","Sıfat","Zarf","Zamir"],2,"Fiili (koştu) nasıl yaptığını gösterdiği için zarftır.","Dil bilgisi – sözcük türleri"],
+["Türkçe","“Güzel bir bahar günüydü.” cümlesindeki “güzel” sözcüğü hangi türdedir?",null,["Zarf","Sıfat","İsim","Zamir"],1,"İsmi niteleyen sözcük sıfattır.","Dil bilgisi – sözcük türleri"],
+["Türkçe","“Koşarak gelen çocuk yorgundu.” cümlesindeki “koşarak” sözcüğü hangi türdedir?",null,["Zarf-fiil","İsim-fiil","Sıfat-fiil","Fiil"],0,"Fiilden türeyip fiili nasıl yapıldığını gösteren fiilimsi zarf-fiildir.","Dil bilgisi – fiilimsiler"],
+["Türkçe","Aşağıdakilerin hangisinde sıfat-fiil vardır?",null,["Yorgun yorgun yürüdü.","Okuyan çocuk başarılı oldu.","Hızla koştu.","Ali gitti."],1,"“Okuyan” sözcüğü isim niteleyen bir sıfat-fiildir.","Dil bilgisi – fiilimsiler"],
+["Türkçe","Aşağıdaki cümlelerin hangisinde anlatım bozukluğu vardır?",null,["Sadece bir tek kişi geldi.","Tüm öğrenciler geldi.","Kitabı dikkatle okudu.","Yarın yağmur yağacak."],0,"“Sadece” ve “tek” aynı anlamı tekrarlar.","Anlatım bozukluğu"],
+["Türkçe","“Mahzun” sözcüğünün eş anlamlısı hangisidir?",null,["Neşeli","Üzgün","Kızgın","Dalgın"],1,"Mahzun, üzgün anlamına gelir.","Sözcükte anlam"],
+["Türkçe","“Ferah” sözcüğünün zıt anlamlısı hangisidir?",null,["Geniş","Dar","Ağır","Kısa"],1,"Ferah, rahat ve geniş anlamındadır; zıt anlamı “dar”dır.","Sözcükte anlam"],
+["Türkçe","Bilim insanları uzun yıllar süren gözlemler sonunda iklim değişikliğinin insan faaliyetleriyle hızlandığını ortaya koymuştur. Bu sonuç, politikaların bilimsel verilere dayanmasının önemini gösterir.","Parçanın konusu aşağıdakilerden hangisidir?",["İklim değişikliğinin nedenleri","Bilim insanlarının çalışma yöntemleri","Politikaların geçmişi","Gözlem araçları"],0,"Metin, iklim değişikliğinin nedenine odaklanır.","Paragraf – ana düşünce"],
+["Türkçe","Sanat, insanın duygularını ifade etme yoludur; ancak asıl değeri onu anlamaya çalışan izleyicide ortaya çıkar.","Bu paragrafta vurgulanan düşünce nedir?",["Sanatın değeri izleyiciyle tamamlanır.","Sanat yalnızca duygu ifadesidir.","Sanatçılar kendi için üretir.","Sanat bilim kadar kesindir."],0,"Metin, sanatın değerinin izleyiciyle tamamlandığını söyler.","Paragraf – ana düşünce"],
+["Türkçe","Öğrencilerin çoğu sınavdan önce panik yaşar. Oysa düzenli çalışma bu kaygıyı azaltır.","Bu metinden hangi sonuca varılabilir?",["Düzenli çalışma kaygıyı azaltabilir.","Sınav kaygısı hiçbir zaman geçmez.","Öğrenciler sınavdan kaçmalıdır.","Panik yaşamak başarı getirir."],0,"Metin, düzenli çalışmanın kaygıyı azalttığını söyler.","Paragraf – anlam çıkarma"],
+["Türkçe","Yazar, olayları anlatırken okuru ikna etmek için “elbette”, “kuşkusuz” gibi sözcükleri kullanmıştır.","Yazarın bu sözcükleri kullanmasının amacı nedir?",["Kesinlik ve inandırıcılık sağlamak","Kısa cümleler kurmak","Hayal gücünü zayıflatmak","Okuru eğlendirmek"],0,"Bu sözcükler anlatılanın kesinliğini ve inandırıcılığını artırır.","Paragraf – yazarın tutumu"],
+["Türkçe","Ali dün sinemaya gitti.","Cümlenin yüklemi hangisidir?",["Ali","dün","sinemaya","gitti"],3,"Yüklem, cümlede işin ya da durumun bildirildiği sözcüktür.","Dil bilgisi – bağlaçlar ve cümle öğeleri"],
+
+/* ================= MATEMATİK (40) ================= */
+["Matematik","Bir bisiklet kiralama merkezi ilk saat için 30 TL, sonraki her saat için 20 TL alıyor.","Ece bisikleti 4 saat kiralarsa kaç TL öder?",["80","90","110","120"],1,"30 + 3 · 20 = 90 TL.","Problemler"],
+["Matematik","Bir laboratuvarda bakteri kolonisi her saat sayısını 2 katına çıkarıyor. Başlangıçta koloni 5 bakteriden oluşuyor.","4 saat sonra koloni kaç bakteriden oluşur?",["40","160","80","20"],2,"5 · 2⁴ = 80.","Üslü sayılar"],
+["Matematik","Bir mağazada bir ürünün fiyatı önce %20 indirildi, sonra indirimli fiyat üzerinden %10 daha indirildi.","Ürünün son fiyatı başlangıç fiyatının yüzde kaçıdır?",["70","72","75","80"],1,"0,8 · 0,9 = 0,72, yani %72.","Yüzde"],
+["Matematik","Ali bir işi 6 günde, Veli aynı işi 3 günde bitirebiliyor.","İkisi birlikte çalışırsa işi kaç günde bitirirler?",["2","3","4","4,5"],0,"1/6 + 1/3 = 1/2 olduğundan iş 2 günde biter.","Problemler"],
+["Matematik","Bir sınıftaki 30 öğrencinin okuduğu kitap sayıları: 10 öğrenci 1 kitap, 10 öğrenci 2 kitap, 10 öğrenci 3 kitap okumuştur.","Sınıfın kitap okuma ortalaması kaçtır?",["1,5","2","2,5","3"],1,"(10 + 20 + 30) / 30 = 2.","Veri analizi"],
+["Matematik","Bir dikdörtgenin uzun kenarı kısa kenarının 3 katıdır ve çevresi 48 cm'dir.","Dikdörtgenin alanı kaç cm²'dir?",["72","96","108","144"],2,"Kısa kenar 6, uzun kenar 18 cm; alan 108 cm².","Geometri – alan ve çevre"],
+["Matematik","Bir sayı örüntüsü 3, 7, 11, 15, … biçiminde ilerliyor.","43 sayısı örüntünün kaçıncı terimidir?",["10","11","12","13"],1,"3 + 4(n − 1) = 43 denkleminden n = 11 bulunur.","Sayı örüntüleri"],
+["Matematik","Bir sınavda her 3 yanlış, 1 doğruyu götürmektedir. Bir öğrencinin 30 doğrusu ve 6 yanlışı vardır.","Öğrencinin neti kaçtır?",["24","26","28","30"],2,"6 yanlış 2 doğruyu götürür; net 30 − 2 = 28.","Problemler"],
+["Matematik","Bir üçgenin iki iç açısı 50° ve 70°'dir.","Üçüncü iç açı kaç derecedir?",["50","60","70","80"],1,"Üçgenin iç açıları toplamı 180° olduğundan üçüncüsü 60°'dir.","Geometri – açılar"],
+["Matematik","Bir pizza 8 eşit dilime bölünmüştür. Ayşe 2 dilim yiyor. Kalan dilimlerin üçte birini Can yiyor.","Pizzadan kaç dilim kalır?",["2","3","4","6"],2,"Kalan 6 dilimin üçte biri 2 dilim; 6 − 2 = 4 dilim kalır.","Kesirler"],
+["Matematik","3x + 5 = 2x + 12 denklemine göre x kaçtır?",null,["5","7","9","17"],1,"x = 12 − 5 = 7.","Denklemler"],
+["Matematik","Bir öğrenci hafta boyunca okuduğu sayfaları kaydetmiştir: Pazartesi 20, Salı 25, Çarşamba 30, Perşembe 25, Cuma 0.","Bu öğrencinin günlük ortalama okuduğu sayfa sayısı kaçtır?",["15","20","25","30"],1,"(20 + 25 + 30 + 25 + 0) / 5 = 20.","Veri analizi"],
+["Matematik","2⁵ · 2³ / 2⁴ işleminin sonucu kaçtır?",null,["8","16","32","64"],1,"2⁸ / 2⁴ = 2⁴ = 16.","Üslü sayılar"],
+["Matematik","Bir torbada 3 kırmızı ve 5 mavi bilye vardır. Torbadan rastgele bir bilye çekiliyor.","Çekilen bilyenin mavi olma olasılığı kaçtır?",["3/8","5/8","5/3","1/2"],1,"8 bilyenin 5'i mavi olduğundan olasılık 5/8'dir.","Olasılık"],
+["Matematik","Bir haritada 2 cm, gerçekte 10 km'yi göstermektedir.","Gerçekte 35 km olan bir yol haritada kaç cm'dir?",["5","7","14","70"],1,"35 km, 10 km'nin 3,5 katıdır; 3,5 · 2 = 7 cm.","Oran–orantı"],
+["Matematik","Dik kenarları 9 cm ve 12 cm olan bir dik üçgende hipotenüs kaç cm'dir?",null,["13","14","15","21"],2,"√(81 + 144) = √225 = 15.","Pisagor"],
+["Matematik","Bir sayının 3 katı, kendisinden 14 fazladır.","Bu sayı kaçtır?",["5","7","14","21"],1,"3x = x + 14 ise x = 7.","Denklemler"],
+["Matematik","Bir ürünün fiyatı %25 artarak 250 TL olmuştur.","Ürünün artıştan önceki fiyatı kaç TL'dir?",["200","210","225","240"],0,"250 / 1,25 = 200 TL.","Yüzde"],
+["Matematik","Bir araç saatte 60 km hızla 2 saat, sonra saatte 40 km hızla 2 saat gitmiştir.","Aracın tüm yolculuk boyunca ortalama hızı saatte kaç km'dir?",["45","48","50","52"],2,"Toplam 200 km, süre 4 saat; ortalama hız 50 km/sa.","Problemler"],
+["Matematik","30 öğrencinin 18'i matematiği, 15'i fen bilimlerini seviyor. İkisini de sevmeyen 4 öğrenci vardır.","İkisini de seven öğrenci sayısı kaçtır?",["5","7","9","11"],1,"En az birini seven 26 öğrenci vardır; 18 + 15 − x = 26 ise x = 7.","Kümeler"],
+["Matematik","Bir işi 3 işçi 12 günde bitirebiliyor.","Aynı iş 6 işçiyle kaç günde biter?",["4","6","8","24"],1,"İşçi sayısı 2 katına çıkınca süre yarıya iner: 6 gün.","Problemler"],
+["Matematik","Bir sayı 4 ile çarpılıp 7 çıkarıldığında 33 bulunuyor.","Bu sayı kaçtır?",["8","10","11","40"],1,"4x − 7 = 33 ise 4x = 40, x = 10.","Denklemler"],
+["Matematik","Bir sayının yarısının üçte biri 5'tir.","Bu sayı kaçtır?",["15","25","30","36"],2,"x / 6 = 5 ise x = 30.","Denklemler"],
+["Matematik","3/4 + 1/6 işleminin sonucu kaçtır?",null,["4/10","11/12","5/6","9/10"],1,"9/12 + 2/12 = 11/12.","Kesirler"],
+["Matematik","0,25 · 0,4 işleminin sonucu kaçtır?",null,["0,01","0,1","1","0,65"],1,"0,25 · 0,4 = 0,1.","Ondalık sayılar"],
+["Matematik","12 ve 18 sayılarının en küçük ortak katı kaçtır?",null,["6","24","36","72"],2,"12 = 2²·3, 18 = 2·3²; EKOK = 2²·3² = 36.","EBOB–EKOK"],
+["Matematik","24 ve 36 sayılarının en büyük ortak bölenini bulunuz.",null,["4","6","12","18"],2,"24 = 2³·3, 36 = 2²·3²; EBOB = 2²·3 = 12.","EBOB–EKOK"],
+["Matematik","2x − 3 < 7 eşitsizliğini sağlayan en büyük tam sayı kaçtır?",null,["4","5","6","7"],0,"2x < 10 ise x < 5; en büyük tam sayı 4'tür.","Eşitsizlik"],
+["Matematik","a = 3 ve b = −2 için 2a² − ab ifadesinin değeri kaçtır?",null,["12","18","24","30"],2,"2 · 9 − (3 · (−2)) = 18 + 6 = 24.","Cebirsel ifadeler"],
+["Matematik","Ali'nin yaşı, Veli'nin yaşının 3 katıdır. İkisinin yaşları toplamı 40 olduğuna göre Veli kaç yaşındadır?",null,["8","10","12","13"],1,"V + 3V = 40 ise V = 10.","Problemler"],
+["Matematik","%10 şeker içeren 20 kg çözeltiye 5 kg saf şeker ekleniyor.","Yeni çözeltinin yüzde kaçı şekerdir?",["25","28","30","35"],1,"Şeker: 2 + 5 = 7 kg; toplam 25 kg; 7/25 = %28.","Yüzde"],
+["Matematik","Alanı 60 cm², kısa kenarı 5 cm olan bir dikdörtgenin çevresi kaç cm'dir?",null,["24","30","34","60"],2,"Uzun kenar 12 cm; çevre 2(5 + 12) = 34 cm.","Geometri – alan ve çevre"],
+["Matematik","Yarıçapı 7 cm olan bir çemberin çevresi kaç cm'dir? (π = 22/7)",null,["22","35","44","154"],2,"Çevre = 2 · 22/7 · 7 = 44 cm.","Çember ve daire"],
+["Matematik","Kenar uzunluğu 3 cm olan bir küpün hacmi kaç cm³'tür?",null,["9","18","27","54"],2,"3 · 3 · 3 = 27 cm³.","Hacim"],
+["Matematik","Bir sınıftaki 25 öğrencinin boy dağılımı: 150–159 cm: 5 öğrenci, 160–169 cm: 12 öğrenci, 170–179 cm: 8 öğrenci.","170 cm ve üzeri boyda olan öğrenciler sınıfın yüzde kaçıdır?",["20","32","40","48"],1,"8 / 25 = %32.","Veri analizi"],
+["Matematik","Bir açı 35° ise tümleyeni kaç derecedir?",null,["35","55","145","65"],1,"Tümler iki açının toplamı 90° olduğundan 90 − 35 = 55°.","Geometri – açılar"],
+["Matematik","Bir açı 110° ise bütünleyeni kaç derecedir?",null,["50","70","80","110"],1,"Bütünler açılar toplamı 180° olduğundan 180 − 110 = 70°.","Geometri – açılar"],
+["Matematik","Bir zar atıldığında üst yüze 3'ten büyük bir sayı gelme olasılığı kaçtır?",null,["1/3","1/2","2/3","1/6"],1,"4, 5 ve 6 olmak üzere 3 uygun durum vardır; 3/6 = 1/2.","Olasılık"],
+["Matematik","Ahmet ile Burak'ın paraları 3 : 5 oranındadır. Toplam 240 TL olduğuna göre Burak'ın parası kaç TL'dir?",null,["90","120","150","160"],2,"Burak'ın payı 5/8; 5/8 · 240 = 150 TL.","Oran–orantı"],
+["Matematik","Bir havuzu birinci musluk 6 saatte, ikinci musluk 3 saatte doldurabilmektedir. İki musluk birlikte açılırsa havuz kaç saatte dolar?",null,["1","2","3","4"],1,"1/6 + 1/3 = 1/2; havuz 2 saatte dolar.","Problemler"],
+
+/* ================= FEN BİLİMLERİ (20) ================= */
+["Fen Bilimleri","Ayşe aynı büyüklükte iki kaba su koydu; birine tuz katıp karıştırdı. İki kaba da birer yumurta bıraktığında, tuzlu sudaki yumurtanın yüzdüğünü, saf sudakinin battığını gözlemledi.","Bu deneyden hangi sonuca varılır?",["Tuzlu suyun yoğunluğu saf sudan fazladır.","Yumurta tuzlu suda çözünür.","Saf suyun kütlesi daha fazladır.","Yumurtanın hacmi tuzlu suda artar."],0,"Cisim, bıraktığı sıvıdan daha az yoğunsa yüzer.","Ölçme ve yoğunluk"],
+["Fen Bilimleri","Aynı türden iki fide aynı miktarda su alıyor. Biri ışık alan pencere kenarına, diğeri karanlık dolaba konuyor. İki hafta sonra ışıktaki fide yeşil kalıyor, dolaptaki sararıyor.","Bu deneyde araştırılan bağımsız değişken hangisidir?",["Bitkinin rengi","Bitkinin türü","Verilen su miktarı","Işık alma durumu"],3,"Bilinçli olarak değiştirilen şey ışık almadır.","Deney tasarımı"],
+["Fen Bilimleri","Bir öğrenci sarkacın salınım süresini ölçerken ipin uzunluğunu değiştiriyor, kütleyi sabit tutuyor.","Bu deneyde bağımlı değişken hangisidir?",["İpin uzunluğu","Salınım süresi","Sarkacın kütlesi","Sarkacın rengi"],1,"Değişimin sonucunda gözlenen büyüklük salınım süresidir.","Deney tasarımı"],
+["Fen Bilimleri","Bir cisme aynı yönde 10 N ve 4 N'luk iki kuvvet uygulanıyor.","Cisme etkiyen net kuvvet kaç N'dur?",["6 N","10 N","14 N","40 N"],2,"Aynı yönlü kuvvetler toplanır: 10 + 4 = 14 N.","Kuvvet ve hareket"],
+["Fen Bilimleri","Buzun erimesi için ısı alması gerekir. Erirken katı hâlden sıvı hâle geçer.","Bu olaya ne ad verilir?",["Yoğunlaşma","Erime","Donma","Süblimleşme"],1,"Katıdan sıvıya geçiş erimedir.","Madde ve değişim"],
+["Fen Bilimleri","Bir gölde algler, küçük balıklar, büyük balıklar ve su kuşları yaşamaktadır.","Bu ekosistemde üretici canlı hangisidir?",["Küçük balık","Büyük balık","Alg","Su kuşu"],2,"Üreticiler kendi besinini fotosentezle üretir.","Ekosistem ve enerji"],
+["Fen Bilimleri","Bir devreye iki özdeş ampul seri bağlanmıştır.","Ampullerden biri devreden koparsa ne olur?",["İkisi de yanmaya devam eder.","Diğeri de söner.","Yalnızca koparılan söner.","Devre hızla ısınır."],1,"Seri devrede akım yolu kesilince diğer ampul de söner.","Elektrik"],
+["Fen Bilimleri","Demir çivi nemli havada zamanla paslanır ve yeni bir madde oluşur.","Paslanma hangi değişimin örneğidir?",["Fiziksel değişim","Kimyasal değişim","Hal değişimi","Yoğunluk değişimi"],1,"Yeni madde oluştuğu için kimyasal değişimdir.","Madde ve değişim"],
+["Fen Bilimleri","Düz bir aynaya 30° gelme açısıyla gelen ışın yansıyor.","Yansıma açısı kaç derecedir?",["30°","60°","90°","15°"],0,"Düz aynada yansıma açısı gelme açısına eşittir.","Işık"],
+["Fen Bilimleri","Bir öğrenci dört özdeş bitkiye farklı miktarlarda su verip boy uzamasını ölçtü: 0 ml → 2 cm, 50 ml → 5 cm, 100 ml → 8 cm, 150 ml → 11 cm.","Verilere dayanarak hangi sonuca varılabilir?",["Su arttıkça boy kısalmaktadır.","Su miktarı boyu etkilemez.","Su arttıkça boy uzamaktadır.","Boy yalnızca ışığa bağlıdır."],2,"Tabloda su arttıkça boy uzaması da artmaktadır.","Deney tasarımı"],
+["Fen Bilimleri","Bir cismin kütlesi 60 g, hacmi 20 cm³'tür.","Cismin yoğunluğu kaç g/cm³'tür?",["1","3","6","40"],1,"Yoğunluk = 60 / 20 = 3 g/cm³.","Ölçme ve yoğunluk"],
+["Fen Bilimleri","Ay'ın Dünya çevresindeki konumu değiştikçe Güneş ışığını alan kısmı farklı açılardan görünür.","Ay'ın evrelerinin temel nedeni hangisidir?",["Dünya'nın gölgesi","Ay'ın kendi ışığı","Ay'ın Dünya etrafındaki konum değişimi","Güneş'in doğuşu"],2,"Evreler, Ay'ın konumu değiştikçe aydınlanan kısmının görünümünün değişmesiyle oluşur.","Dünya ve Evren"],
+["Fen Bilimleri","Mevsimler, Dünya'nın ekseninin eğik olması nedeniyle Güneş ışınlarının yeryüzüne düşme açısının değişmesiyle oluşur.","Mevsimlerin oluşmasının temel nedeni hangisidir?",["Dünya'nın Güneş'e uzaklığının değişmesi","Dünya'nın eksen eğikliği","Ay'ın çekim gücü","Dünya'nın dönüş hızı"],1,"Eksen eğikliği mevsimlerin temel nedenidir.","Dünya ve Evren"],
+["Fen Bilimleri","Kar üzerinde geniş tabanlı kar ayakkabısı giyen bir kişi, dar tabanlı ayakkabı giyen kişiye göre daha az batar.","Bu durum hangi kavramla açıklanır?",["Basınç: alan arttıkça basınç azalır","Sürtünme","Kaldırma kuvveti","Yoğunluk"],0,"Aynı kuvvet daha geniş alana yayıldığında basınç azalır.","Basınç"],
+["Fen Bilimleri","Bir bitkide çiçek rengini belirleyen özellikler, ebeveynden yavrulara genler yoluyla aktarılır.","Bu aktarım hangi süreçtir?",["Kalıtım","Fotosentez","Solunum","Boşaltım"],0,"Özelliklerin nesilden nesle genlerle aktarılması kalıtımdır.","Kalıtım ve üreme"],
+["Fen Bilimleri","Bitkiler, ışık enerjisi kullanarak karbondioksit ve sudan besin üretirken hangi ürünleri oluşturur?",null,["Glikoz ve oksijen","Yalnızca azot","Karbon monoksit","Tuz"],0,"Fotosentez sonucunda glikoz ve oksijen oluşur.","Ekosistem ve enerji"],
+["Fen Bilimleri","Limon suyu mavi turnusol kâğıdını kırmızıya çevirmektedir.","Limon suyunun özelliği hangisidir?",["Bazik","Asidik","Nötr","Tuzlu"],1,"Mavi turnusoru kırmızıya çeviren maddeler asidiktir.","Asit-baz"],
+["Fen Bilimleri","Aşağıdakilerden hangisi eşeysiz üremeye örnektir?",null,["Tohumla üreme","Bölünerek üreme (amip)","Dölleme ile üreme","Yumurtadan üreme"],1,"Amip tek hücresini ikiye bölerek çoğalır.","Kalıtım ve üreme"],
+["Fen Bilimleri","Bir öğrenci farklı sıcaklıklarda aynı sıvının buharlaşma hızını ölçmüş ve sıcaklık arttıkça buharlaşmanın hızlandığını gözlemlemiştir.","Bu verilerden çıkarılabilecek sonuç hangisidir?",["Buharlaşma sıcaklıkla ilişkilidir.","Sıcaklık buharlaşmayı durdurur.","Buharlaşma yalnızca gece gerçekleşir.","Sıvının rengi buharlaşmayı belirler."],0,"Veriler sıcaklık ile buharlaşma hızı arasında bir ilişki olduğunu gösterir.","Madde ve değişim"],
+["Fen Bilimleri","Sürtünmesiz bir ortamda hareket eden bir cisme uygulanan net kuvvet sıfırdır.","Bu cisim nasıl hareket eder?",["Durur.","Sabit hızla doğrusal hareket eder.","Giderek hızlanır.","Yönünü hemen değiştirir."],1,"Net kuvvet sıfırsa cisim sabit hızla doğrusal hareketini sürdürür.","Kuvvet ve hareket"],
+
+/* ================= İNKILAP TARİHİ (20) ================= */
+["İnkılap Tarihi","23 Nisan 1920'de açılan Meclis, ülkenin yönetimini üstlendi. Padişah ve hükümet ise İstanbul'da, işgal güçlerinin baskısı altında karar alamaz durumdaydı.","Bu gelişme en çok hangi ilkenin gereğidir?",["Halkçılık","Milli egemenlik","Laiklik","Devletçilik"],1,"Yönetim yetkisinin milleti temsil eden Meclis'e geçmesi milli egemenliktir.","Atatürk ilkeleri"],
+["İnkılap Tarihi","3 Mart 1924'te çıkarılan bir kanunla ülkedeki bütün okullar Maarif Vekâleti'ne bağlandı, medreseler kapatıldı.","Bu düzenlemenin temel amacı aşağıdakilerden hangisidir?",["Yabancı okulları çoğaltmak","Eğitimi ücretli hâle getirmek","Eğitimde birliği sağlamak","Öğretim süresini kısaltmak"],2,"Tevhid-i Tedrisat ile eğitim tek elde toplanmıştır.","İnkılaplar"],
+["İnkılap Tarihi","19 Mayıs 1919'da Mustafa Kemal'in Samsun'a çıkışı, Millî Mücadele'nin başlangıcı olarak kabul edilir.","Bu olay en doğrudan hangi kavramla ilgilidir?",["Bağımsızlık","Devletçilik","Laiklik","Halkçılık"],0,"Samsun'dan başlayan mücadele bağımsızlık amacı taşır.","Milli Mücadele"],
+["İnkılap Tarihi","1923 Lozan Antlaşması, Türkiye'nin egemenliğinin uluslararası alanda kabul edilmesini sağlamıştır.","Lozan Antlaşması'nın Türkiye için en önemli sonucu nedir?",["Sevr'in kabulü","Bağımsızlığın uluslararası kabulü","Kapitülasyonların artması","Osmanlı'nın yeniden kurulması"],1,"Lozan ile bağımsızlık uluslararası düzeyde tanındı.","Milli Mücadele"],
+["İnkılap Tarihi","29 Ekim 1923'te Cumhuriyet ilan edilmiştir.","Cumhuriyet'in ilanıyla benimsenen yönetim biçimi hangisidir?",["Monarşi","Cumhuriyet","Federasyon","Meşrutiyet"],1,"Cumhuriyet, egemenliğin halka dayandığı yönetim biçimidir.","İnkılaplar"],
+["İnkılap Tarihi","1 Kasım 1922'de saltanat kaldırılmış, egemenliğin milletin olduğu bir kez daha vurgulanmıştır.","Saltanatın kaldırılması hangi ilkenin uygulamasıdır?",["Milli egemenlik","Laiklik","Halkçılık","Devletçilik"],0,"Egemenliğin millete verilmesi milli egemenlik ilkesidir.","İnkılaplar"],
+["İnkılap Tarihi","3 Mart 1924'te halifeliğin kaldırılmasıyla din ile devlet işleri birbirinden ayrılmıştır.","Bu düzenleme hangi ilkeyle ilgilidir?",["Laiklik","Milliyetçilik","Halkçılık","Devletçilik"],0,"Din işlerinin devlet yönetiminden ayrılması laikliktir.","İnkılaplar"],
+["İnkılap Tarihi","1928'de Latin alfabesi kabul edilmiştir.","Harf inkılabının temel amacı hangisidir?",["Okuma-yazma oranını artırmak ve çağdaşlaşmak","Osmanlıca'yı yaygınlaştırmak","Yabancı dille eğitim yapmak","Dinî metinleri öğretmek"],0,"Yeni alfabe okuma-yazmayı kolaylaştırdı.","İnkılaplar"],
+["İnkılap Tarihi","Devletçilik ilkesine göre devlet, ekonomide yatırımları yönlendirerek ülkenin kalkınmasını hedefler.","Devletçilik ilkesiyle hangi amaç güdülmüştür?",["Ekonomik bağımsızlık ve kalkınma","Yabancı sermayeye tam bağımlılık","Özel sektörün tamamen kapatılması","Tarım alanının terk edilmesi"],0,"Devletçilik ekonomik bağımsızlığı hedefler.","Atatürk ilkeleri"],
+["İnkılap Tarihi","Halkçılık ilkesine göre devlet, toplumdaki sınıf ayrımlarını ortadan kaldırmayı ve vatandaşları eşit görmeyi amaçlar.","Halkçılık ilkesine uygun bir devlet anlayışı hangisidir?",["Sınıf ayrımını artırır.","Toplumdaki ayrıcalıkları korur.","Bütün vatandaşları eşit görür.","Yalnızca zenginleri gözetir."],2,"Halkçılık, eşitlik ve sınıfsız bir düzen hedefler.","Atatürk ilkeleri"],
+["İnkılap Tarihi","Milliyetçilik ilkesi, milletin birlik ve beraberliğini güçlendirmeyi temel alır.","Milliyetçilik ilkesinin temel amacı nedir?",["Diğer milletlere üstünlük sağlamak","Milli birlik ve beraberliği güçlendirmek","Yabancı kültürü yaymak","Ekonomiyi dış dünyaya kapatmak"],1,"Milliyetçilik milletin birlik ve bütünlüğünü önceler.","Atatürk ilkeleri"],
+["İnkılap Tarihi","Sakarya Meydan Muharebesi (1921), Yunan ilerleyişinin durdurulmasını ve Ankara'nın korunmasını sağlamıştır.","Bu savaşın sonucunda ne gerçekleşmiştir?",["Bağımsızlık savaşı sona ermiştir.","Yunan ordusu geri çekilmiştir.","Sevr Antlaşması imzalanmıştır.","Lozan görüşmeleri başlamıştır."],1,"Yunan ordusu geri çekilmek zorunda kalmıştır.","Milli Mücadele"],
+["İnkılap Tarihi","Türk Tarih Kurumu (1931) ve Türk Dil Kurumu (1932), milli kültürü ve dili araştırmak için kurulmuştur.","Bu kurumların temel amacı nedir?",["Millî kültürü ve dili araştırıp geliştirmek","Yabancı dilleri öğretmek","Askerî eğitim vermek","Ekonomi politikası belirlemek"],0,"Kurumlar milli kültür ve dilin geliştirilmesini hedefler.","İnkılaplar"],
+["İnkılap Tarihi","1934'te çıkarılan Soyadı Kanunu ile vatandaşların resmî bir soyadı alması zorunlu hâle getirilmiştir.","Bu kanunun sağladığı yenilik nedir?",["Herkesin resmî bir soyadı alması","Soyadlarının yalnızca askerlere verilmesi","Unvanların artırılması","Kadınların soyadı alamaması"],0,"Soyadı Kanunu ile herkes resmî soyad almak zorunda kalmıştır.","İnkılaplar"],
+["İnkılap Tarihi","1934'te kadınlara milletvekili seçilme ve seçme hakkı tanınmıştır.","Bu gelişme hangi ilkeyle daha yakından ilgilidir?",["Milli egemenlik ve eşitlik","Devletçilik","Dış politika","Ekonomik bağımsızlık"],0,"Kadınların siyasi haklara kavuşması eşitlik anlayışının sonucudur.","İnkılaplar"],
+["İnkılap Tarihi","1936 Montrö Boğazlar Sözleşmesi ile Türkiye, Boğazlar üzerindeki egemenliğini yeniden kazanmıştır.","Bu sözleşmeyle Türkiye'nin kazandığı hak nedir?",["Boğazlar üzerindeki egemenlik ve askerî hak","Ekonomik kapitülasyon","Ticaret antlaşması","Toprak kazancı"],0,"Montrö ile Boğazlar üzerindeki egemenlik Türkiye'ye geri verilmiştir.","Dış politika"],
+["İnkılap Tarihi","1930'larda Türkiye'de sanayileşmeyi hedefleyen Birinci Beş Yıllık Sanayi Planı uygulanmıştır.","Bu plan hangi ilkeyle ilişkilidir?",["Devletçilik","Laiklik","Halkçılık","İnkılapçılık"],0,"Devletin sanayi yatırımlarını yönlendirmesi devletçiliktir.","Atatürk ilkeleri"],
+["İnkılap Tarihi","1921 Teşkilat-ı Esasiye Kanunu, egemenliğin milletin olduğunu açıkça belirtmiştir.","Bu anayasanın benimsediği ilke hangisidir?",["Milli egemenlik","Padişahın mutlak yetkisi","Monarşi","İki meclisli yapı"],0,"Teşkilat-ı Esasiye egemenliği millete dayandırır.","Milli Mücadele"],
+["İnkılap Tarihi","Mudanya Ateşkes Antlaşması (1922), Doğu Trakya ve İstanbul'un geri alınmasının yolunu açmıştır.","Antlaşmanın Türk milleti açısından önemi nedir?",["Doğu Trakya ve İstanbul'un geri alınmasının yolunu açmıştır.","Sevr Antlaşması'nı kabul etmiştir.","Yunanistan'a toprak vermiştir.","Padişahlığı güçlendirmiştir."],0,"Mudanya ile Doğu Trakya ve İstanbul'un geri alınması sağlanmıştır.","Milli Mücadele"],
+["İnkılap Tarihi","Atatürk, “Yurtta sulh, cihanda sulh” ilkesiyle devletlerin barış içinde yaşamasını savunmuştur.","Bu ilke hangi dış politika anlayışını yansıtır?",["Savaşa hazırlanmak","Barışçıl dış politika","Sömürgecilik","Askerî ittifaklar kurmak"],1,"İlke, barışçıl dış politikanın temelidir.","Dış politika"],
+
+/* ================= DİN KÜLTÜRÜ (20) ================= */
+["Din Kültürü","Ahmet, arkadaşının ağır hasta olduğunu duyunca ziyaretine gitti, ona moral verdi ve ailesine yardım etmek istediğini söyledi.","Ahmet'in davranışı aşağıdaki değerlerden hangisini yansıtır?",["Rekabet","Bencillik","Tutumluluk","Yardımlaşma"],3,"Hasta ziyareti ve destek yardımlaşma değerindendir.","Ahlak ve değerler"],
+["Din Kültürü","Elif, sınava planlı çalıştığı hâlde istediği sonucu alamadı. “Elbet bir hayrı vardır, daha çok çalışacağım” diyerek yoluna devam etti.","Elif'in tutumu hangi kavramlarla en çok ilişkilidir?",["Tevekkül ve sabır","Gösteriş","Dedikodu","Cimrilik"],0,"Elif üzerine düşeni yapıp sonucu kabullenmektedir.","Dinî kavramlar"],
+["Din Kültürü","Bir öğrenci sınavda kötü sonuç aldığında kendini suçlamadan planını gözden geçiriyor ve yeniden çalışmaya başlıyor.","Bu tutum hangi değerle en çok ilişkilidir?",["Sorumluluk ve çalışkanlık","Kıskançlık","Gösteriş","Lakaytlık"],0,"Öğrenci hatasını kabul edip sorumluluk alıyor.","Ahlak ve değerler"],
+["Din Kültürü","Zekât, belli bir servete ulaşan müslümanın, ihtiyaç sahiplerine verdiği mali bir yükümlülüktür.","Zekâtın temel amacı nedir?",["Gösteriş yapmak","Toplumsal dayanışmayı sağlamak","Devlet gelirini artırmak","Kişisel prestij kazanmak"],1,"Zekât, zengin ile yoksul arasında dayanışma sağlar.","İbadetler"],
+["Din Kültürü","Namaz, günde beş vakit kılınan ve insanı Allah'a yakınlaştıran bir ibadettir.","Metinde anlatılan ibadetin özelliklerinden biri hangisidir?",["Yılda bir kez yapılır.","Gün içinde belirli vakitlerde kılınır.","Yalnızca yolculukta yapılır.","Yalnızca bayramda yapılır."],1,"Namaz, günün belirli vakitlerinde kılınır.","İbadetler"],
+["Din Kültürü","Ramazan'da oruç tutan kişi, güneşin doğuşundan batışına kadar yeme ve içmeden uzak durur; bu süreçte kötü söz ve davranışlardan da kaçınır.","Orucun manevi amacı hangisidir?",["Kilo vermek","Nefis terbiyesi ve takva","Zengin olmak","Gösteriş yapmak"],1,"Oruç nefsi terbiye ederek takvaya ulaşmayı amaçlar.","İbadetler"],
+["Din Kültürü","Hz. Muhammed, insanlar arasında adaletli davranmayı ve dürüstlüğü hayatının merkezine koymuştur.","Bu davranışlar hangi ahlaki değere karşılık gelir?",["Adalet ve dürüstlük","Tembellik","Kıskançlık","Gösteriş"],0,"Adalet ve dürüstlük örnek ahlakın temelidir.","Kur'an ve peygamberler"],
+["Din Kültürü","Ramazan Bayramı, oruç ibadetinin ardından kutlanır ve akrabalar arasında ziyaretler yapılır.","Bayramların toplumsal işlevi nedir?",["Yalnızca eğlence sağlamak","Akrabalık bağlarını güçlendirmek","Ekonomiyi durdurmak","Yabancılarla kavga etmek"],1,"Bayramlar akrabalık bağlarını güçlendirir.","İbadetler"],
+["Din Kültürü","İslam inancında iman esasları arasında ahiret, melekler ve kitaplar yer alır.","Aşağıdakilerden hangisi iman esaslarından değildir?",["Ahiret","Melekler","Kitaplar","Zekât"],3,"Zekât bir ibadettir; iman esası değildir.","İman esasları"],
+["Din Kültürü","Bir insan elinden gelen çabayı gösterir, sonucu ise Allah'a bırakır.","Bu anlayış hangi kavramla ilgilidir?",["Tevekkül","Gurur","Tembellik","Öfke"],0,"Tevekkül, çabayı gösterip sonucu Allah'a bırakmaktır.","Dinî kavramlar"],
+["Din Kültürü","Hac, belirli zaman ve mekânda yapılan ve maddi-manevi gücü yeten müslümanlara farz olan bir ibadettir.","Hacca gitmenin şartı hangisidir?",["Yaşın büyük olması","Maddi ve bedensel gücün yeterli olması","Yalnızca zengin olmak","Çocuk sahibi olmak"],1,"Hac, gücü yeten müslümanlara farz kılınmıştır.","İbadetler"],
+["Din Kültürü","Doğruluk, insanın söz ve davranışlarında samimi olmasıdır.","Aşağıdakilerden hangisi doğruluk değerinin bir yansımasıdır?",["Verdiği sözü tutmak","Yalan söyleyip kazanç sağlamak","Başkalarına iftira atmak","Sözünde durmamak"],0,"Söz ve davranışta tutarlı olmak doğruluğun gereğidir.","Ahlak ve değerler"],
+["Din Kültürü","Bir öğrenci, sınıf arkadaşının eşyasını kaybettiğini görünce ona yardım etmek için birlikte aramaya başlıyor.","Bu davranış hangi değeri yansıtır?",["Yardımseverlik","Bencillik","İsrafçılık","Kıskançlık"],0,"Başkasının sıkıntısını paylaşmak yardımseverliktir.","Ahlak ve değerler"],
+["Din Kültürü","İslam inancına göre Allah, insanlara doğru yolu göstermek için peygamberler göndermiştir.","Peygamberlerin temel görevi nedir?",["Savaş yönetmek","İnsanları Allah'ın emirlerine çağırmak","Ticaret yapmak","Yönetici seçmek"],1,"Peygamberler insanları Allah'ın emirlerine çağırmakla görevlidir.","Kur'an ve peygamberler"],
+["Din Kültürü","Başına bir nimet geldiğinde şükretmek, bir sıkıntıyla karşılaştığında sabretmek müminin özelliğidir.","Bu cümlede hangi iki kavram vurgulanmaktadır?",["Şükür ve sabır","Gurur ve öfke","Tembellik ve kaçınma","Kıskançlık ve gösteriş"],0,"Metin, nimette şükür ve sıkıntıda sabır üzerinde durur.","Dinî kavramlar"],
+["Din Kültürü","Müminler birbirlerine karşı merhametli ve şefkatli olmalıdır.","Bu anlayış hangi ilişkiyi öne çıkarır?",["Kardeşlik ve sevgi","Rekabet ve düşmanlık","Bencillik","Mesafeli durmak"],0,"Merhamet ve şefkat kardeşlik ilişkisinin temelidir.","Ahlak ve değerler"],
+["Din Kültürü","Ahiret inancı, insanın dünyada yaptığı iyi ve kötü davranışların karşılığını bulacağına inanmasıdır.","Ahiret inancının insan davranışına etkisi nedir?",["Sorumluluk bilinci kazandırır.","Tembelliğe yol açar.","Gösteriş yaptırır.","Ekonomiyi bozar."],0,"Hesap gününe inanmak insanı sorumlu kılar.","İman esasları"],
+["Din Kültürü","Sadaka, karşılık beklemeden verilen yardımdır ve zorunlu değildir. Zekât ise belirli şartlarda verilmesi zorunlu bir yükümlülüktür.","Sadaka ile zekât arasındaki temel fark nedir?",["Sadaka gönüllü, zekât zorunludur.","Zekât yalnızca parayla verilir.","Sadaka yalnızca Ramazan'da verilir.","Aralarında hiçbir fark yoktur."],0,"Sadaka gönüllüdür; zekât belirli şartlarda zorunludur.","İbadetler"],
+["Din Kültürü","Gerçekten bilgili olan kişi, bilgisini başkalarına üstünlük kurmak için kullanmaz.","Bu anlayış hangi değerle ilişkilidir?",["Alçakgönüllülük","Kibir","Öfke","Kıskançlık"],0,"Bilginin tevazuyla taşınması alçakgönüllülüğü gösterir.","Ahlak ve değerler"],
+["Din Kültürü","Din; inanç, ibadet ve ahlak alanlarında insanın hayatını düzenleyen bir bütündür.","Din Kültürü dersinin temel amacı hangisidir?",["Yalnızca ezber yaptırmak","Dinî bilgi ve değerleri anlamak ve hayatta uygulamak","Diğer dinleri yermek","Sınav puanını artırmak"],1,"Ders, dinî bilgi ve değerleri hayata geçirmeyi hedefler.","Dinî kavramlar"],
+
+/* ================= İNGİLİZCE (20) ================= */
+["İngilizce","Tom wakes up at 6:30 every day. He has breakfast, brushes his teeth and goes to school by bus. After school, he plays football with his friends.","What does Tom do after school?",["He plays football.","He goes by bus.","He has breakfast.","He wakes up at 6:30."],0,"The text says he plays football with his friends after school.","Okuma – bilgi bulma"],
+["İngilizce","Lisa: Would you like to come to my birthday party on Saturday?\nBen: I'd love to, but I have a piano lesson at 3 o'clock.\nLisa: No problem, the party starts at 5.","What can we understand from the dialogue?",["Ben can't go to the party.","Ben can come because the party is after his lesson.","Lisa has a piano lesson.","The party starts at 3 o'clock."],1,"The lesson is at 3 and the party starts at 5.","Diyalog"],
+["İngilizce","Ali is very tall. He plays basketball every weekend and he is in the school team.","What sport does Ali play?",["Football","Basketball","Tennis","Volleyball"],1,"The text says Ali plays basketball every weekend.","Okuma – bilgi bulma"],
+["İngilizce","The library is open from 9 a.m. to 5 p.m. on weekdays, and it is closed on Sundays.","When is the library closed?",["On Mondays","On Saturdays","On Sundays","On weekdays"],2,"The library is closed on Sundays.","Okuma – bilgi bulma"],
+["İngilizce","Mom: Did you finish your homework?\nEce: Not yet. I'll finish it after dinner.","When will Ece finish her homework?",["Before breakfast","After dinner","This morning","She won't finish it"],1,"Ece says she will finish it after dinner.","Diyalog"],
+["İngilizce","Cem: What time does the film start?\nDerya: It starts at 7:30, so we should leave at 7.","What should they do?",["Leave at 7:30","Leave at 7","Start the film","Cancel the film"],1,"Derya suggests leaving at 7.","Diyalog"],
+["İngilizce","Last summer we visited Antalya. We swam in the sea every day and ate delicious fish.","What did they do in Antalya?",["They skied.","They swam in the sea.","They visited museums only.","They stayed indoors."],1,"The text says they swam in the sea every day.","Okuma – geçmiş zaman"],
+["İngilizce","There aren't any apples in the fridge, but there are some oranges.","What is in the fridge?",["Apples","Oranges","Both apples and oranges","Nothing at all"],1,"There are oranges but no apples.","Okuma – bilgi bulma"],
+["İngilizce","Recycling helps protect the environment. When people separate paper, glass and plastic, less waste goes to landfills.","What is the main idea of the text?",["Paper is expensive.","Recycling protects nature.","Plastic is dangerous.","Landfills are large."],1,"The text explains how recycling protects the environment.","Okuma – ana fikir"],
+["İngilizce","If it rains tomorrow, we will stay at home and watch a movie.","What will they do if it rains?",["Go to the beach","Stay at home and watch a movie","Visit their grandparents","Go shopping"],1,"The first conditional sentence states this plan.","Koşul cümleleri"],
+["İngilizce","Ayla: I've never been to London.\nZeynep: You should go! The museums are amazing.","What does Zeynep think about London?",["It is boring.","The museums are amazing.","It is too expensive.","It is far away."],1,"Zeynep says the museums are amazing.","Diyalog"],
+["İngilizce","Emre studied for two hours yesterday, so he got a good grade on his English test.","Why did Emre get a good grade?",["He studied for two hours.","He copied from a friend.","He had a holiday.","He skipped the test."],0,"The sentence gives studying as the reason.","Okuma – bilgi bulma"],
+["İngilizce","The shop opens at 10 and closes at 8. It is open every day except Monday.","On which day is the shop closed?",["Sunday","Monday","Friday","Saturday"],1,"The shop is closed on Mondays.","Okuma – bilgi bulma"],
+["İngilizce","Nobody likes waiting in long queues, so many people shop online.","Why do many people shop online?",["They like long queues.","They don't like waiting.","Online shops are closed.","Shops are cheaper online."],1,"The text says people dislike waiting in queues.","Okuma – ana fikir"],
+["İngilizce","Ben: Can you help me with my science project?\nLily: Sure, but I have to finish my essay first.","What will Lily do first?",["Help Ben","Finish her essay","Start the science project","Go home"],1,"Lily says she has to finish her essay first.","Diyalog"],
+["İngilizce","Water boils at 100 degrees Celsius at sea level.","At what temperature does water boil at sea level?",["50 °C","80 °C","100 °C","120 °C"],2,"The text gives 100 °C.","Okuma – bilgi bulma"],
+["İngilizce","Our teacher told us that we must bring our books on Monday, not on Tuesday.","When must the students bring their books?",["Tuesday","Monday","Wednesday","Friday"],1,"The teacher says Monday.","Okuma – bilgi bulma"],
+["İngilizce","Zeynep is good at drawing, but she is not interested in sports.","What is Zeynep interested in?",["Sports","Drawing","Music","Cooking"],1,"She is good at drawing and not interested in sports.","Okuma – bilgi bulma"],
+["İngilizce","A: Would you like some tea?\nB: Yes, please. With a little sugar.","What does B want?",["Coffee with sugar","Tea with a little sugar","Juice","Nothing"],1,"B accepts tea with a little sugar.","Diyalog"],
+["İngilizce","Last year, the school built a new science lab. Students now do experiments every week.","What has changed at school?",["Students do experiments every week.","The school closed the lab.","Students stopped learning science.","The school moved to another city."],0,"The new lab allows students to do experiments every week.","Okuma – geçmiş zaman"]
+];
+
+
+
+// Ders çalışma bankası: [ders, konu, soru, şıklar, doğru, açıklama]
+const DQ=[
+["Türkçe","Sözcük türleri","Aşağıdakilerden hangisi isim (ad) soylu bir sözcüktür?",["koşmak","güzel","kitap","hızlıca"],2,"“Kitap”, bir varlığın adıdır."],
+["Türkçe","Sözcük türleri","Aşağıdaki cümlelerin hangisinde sıfat vardır?",["Kedi uyuyor.","Kırmızı elma düştü.","Ali koştu.","Hızla geldi."],1,"“Kırmızı”, elmayı niteleyen sıfattır."],
+["Türkçe","Sözcük türleri","Aşağıdakilerden hangisi zamirdir?",["Biz","Okul","Yaz","Güzel"],0,"Zamirler isimlerin yerini tutar; “biz” bir zamirdir."],
+["Türkçe","Sözcük türleri","Aşağıdakilerden hangisi zarftır?",["Çok","Ev","Mavi","Okumak"],0,"“Çok”, bir sıfatı ya da zarfı niteleyen belirteçtir."],
+["Türkçe","Cümle bilgisi","“Ayşe dün pazara gitti.” cümlesinin öznesi hangisidir?",["Dün","Pazara","Ayşe","Gitti"],2,"Özne, işi yapan kişi ya da varlıktır."],
+["Türkçe","Cümle bilgisi","Aşağıdaki cümlelerin hangisinde yüklem eksik değildir?",["Sabah erken kalktı.","Sabah erken.","Ali ve Ayşe.","Güzel bir gün."],0,"Cümle, yüklemi olan bir yargı bildirir."],
+["Türkçe","Cümle bilgisi","“Ne kadar güzel!” cümlesi hangi cümle türüdür?",["Soru cümlesi","Ünlem cümlesi","Emir cümlesi","Olumsuz cümle"],1,"Duygu bildiren cümle ünlem cümlesidir."],
+["Türkçe","Cümle bilgisi","Aşağıdakilerden hangisi olumsuz cümledir?",["Okula gittim.","Okula gitmedim.","Okula gidiyor muyum?","Gidin okula."],1,"“-me” olumsuzluk ekiyle kurulmuştur."],
+["Türkçe","Yazım kuralları","Aşağıdaki sözcüklerin hangisi yanlış yazılmıştır?",["Kitab","Mektup","Kalem","Okul"],0,"Doğrusu “kitap”tır."],
+["Türkçe","Yazım kuralları","Hangi cümlede büyük harf kullanımı yanlıştır?",["Ankara başkenttir.","Atatürk 1881'de doğdu.","Bu yıl Ağustos ayında tatile çıkacağız.","Türkiye'de yaşıyoruz."],2,"Ay adları küçük harfle yazılır."],
+["Türkçe","Yazım kuralları","Hangi cümlede “de” bağlaç olarak doğru ayrı yazılmıştır?",["Evde de kalabilirsin.","Sen de geldin mi?","Bende kalem var.","Kitapta da yazıyor."],1,"Bağlaç olan “de” ayrı yazılır; “Sen de” kullanımı doğrudur."],
+["Türkçe","Yazım kuralları","Aşağıdakilerden hangisinde “ki” eki bitişik yazılmıştır?",["Evdeki kitap","Odada ki kalem","Sen ki gelmedin","Bu ki doğru"],0,"Ek olan “-ki” bitişik yazılır."],
+
+["Matematik","Tam sayılar","−5 + 8 işleminin sonucu kaçtır?",["−13","3","−3","13"],1,"−5 + 8 = 3."],
+["Matematik","Tam sayılar","(−4) · (−3) işleminin sonucu kaçtır?",["−12","12","−7","7"],1,"İki negatif sayının çarpımı pozitiftir."],
+["Matematik","Tam sayılar","−20 ÷ 4 işleminin sonucu kaçtır?",["−5","5","−16","16"],0,"Farklı işaretli bölmenin sonucu negatiftir."],
+["Matematik","Tam sayılar","−7, 2, 0 ve −2 sayılarından hangisi en küçüktür?",["−7","2","0","−2"],0,"Negatif sayılarda mutlak değeri büyük olan daha küçüktür."],
+["Matematik","Denklemler","x + 7 = 15 ise x kaçtır?",["6","8","22","9"],1,"x = 15 − 7 = 8."],
+["Matematik","Denklemler","2x − 4 = 10 ise x kaçtır?",["3","7","6","14"],1,"2x = 14, x = 7."],
+["Matematik","Denklemler","3(x − 2) = 12 ise x kaçtır?",["4","6","8","10"],1,"x − 2 = 4, x = 6."],
+["Matematik","Denklemler","x / 5 = 4 ise x kaçtır?",["9","20","1","45"],1,"x = 4 · 5 = 20."],
+["Matematik","Üçgenler","Bir üçgenin iki açısı 45° ve 65° ise üçüncü açı kaç derecedir?",["60","70","80","90"],1,"180 − 110 = 70°."],
+["Matematik","Üçgenler","Kenar uzunlukları 3, 4 ve 5 cm olan üçgen hangi türdendir?",["Eşkenar üçgen","İkizkenar üçgen","Dik üçgen","Geniş açılı üçgen"],2,"3² + 4² = 5² olduğundan dik üçgendir."],
+["Matematik","Üçgenler","Eşkenar üçgenin her iç açısı kaç derecedir?",["45","60","90","120"],1,"Eşkenar üçgende açılar eşit ve toplam 180° olduğundan 60°'dir."],
+["Matematik","Üçgenler","Üçgenin alanı nasıl hesaplanır?",["taban · yükseklik","taban · yükseklik / 2","taban + yükseklik","2 · taban · yükseklik"],1,"Üçgen alanı, taban ile yüksekliğin çarpımının yarısıdır."],
+
+["Fen Bilimleri","Kuvvet ve hareket","Kütlesi 2 kg olan bir cismin ağırlığı yaklaşık kaç N'dur? (g ≈ 10 m/s²)",["2","10","20","200"],2,"G = m · g = 2 · 10 = 20 N."],
+["Fen Bilimleri","Kuvvet ve hareket","Sürtünme kuvveti bir cismin hareketini nasıl etkiler?",["Hareketi kolaylaştırır.","Hareketi zorlaştırır.","Hareketi etkilemez.","Hızını her zaman artırır."],1,"Sürtünme hareketin tersi yönünde etki eder."],
+["Fen Bilimleri","Kuvvet ve hareket","Newton'un birinci yasası hangi durumu anlatır?",["Net kuvvet sıfırken cisim durgun ya da sabit hızla hareket eder.","Kuvvet arttıkça ivme azalır.","Her etkiye eşit bir tepki vardır.","Cisim düşerken hızlanır."],0,"Net kuvvet sıfırsa cismin hareket durumu değişmez."],
+["Fen Bilimleri","Kuvvet ve hareket","100 m yolu 20 saniyede giden bir cismin hızı kaç m/s'dir?",["2","5","10","20"],1,"Hız = yol / zaman = 100 / 20 = 5 m/s."],
+["Fen Bilimleri","Madde ve ısı","Donma olayında madde hangi değişimi geçirir?",["Sıvıdan katıya","Gazdan sıvıya","Katıdan gaza","Sıvıdan gaza"],0,"Sıvının katı hâle geçmesi donmadır."],
+["Fen Bilimleri","Madde ve ısı","Isı alan bir maddenin sıcaklığı genellikle nasıl değişir?",["Genellikle artar.","Her zaman azalır.","Her zaman sabit kalır.","Sıfıra iner."],0,"Hâl değişimi olmadığında ısı alan maddenin sıcaklığı artar."],
+["Fen Bilimleri","Madde ve ısı","Saf suyun deniz seviyesindeki kaynama noktası kaç °C'dir?",["0","50","100","373"],2,"Saf su deniz seviyesinde 100 °C'de kaynar."],
+["Fen Bilimleri","Madde ve ısı","Buharlaşma hangi durumda hızlanır?",["Sıcaklık ve yüzey alanı arttığında","Rüzgâr kesildiğinde","Sıcaklık düştüğünde","Kap kapatıldığında"],0,"Sıcaklık ve yüzey alanı arttıkça buharlaşma hızlanır."],
+["Fen Bilimleri","Canlılar ve hücre","Bitki hücresinde bulunup hayvan hücresinde bulunmayan yapı hangisidir?",["Hücre zarı","Çekirdek","Hücre duvarı","Sitoplazma"],2,"Hücre duvarı yalnızca bitki hücrelerinde bulunur."],
+["Fen Bilimleri","Canlılar ve hücre","Hücrenin enerji üretim merkezi hangisidir?",["Ribozom","Mitokondri","Çekirdek","Hücre zarı"],1,"Mitokondri hücresel solunumla enerji üretir."],
+["Fen Bilimleri","Canlılar ve hücre","Canlıların temel yapı birimi nedir?",["Doku","Organ","Hücre","Sistem"],2,"Tüm canlılar hücrelerden oluşur."],
+["Fen Bilimleri","Canlılar ve hücre","Aşağıdakilerden hangisi tek hücreli bir canlıdır?",["Ahtapot","Amip","Kedi","Gül"],1,"Amip tek hücreli bir canlıdır."],
+
+["İnkılap Tarihi","Osmanlı'dan Cumhuriyete","Osmanlı Devleti'nde saltanat hangi yıl kaldırılmıştır?",["1922","1923","1924","1920"],0,"Saltanat 1 Kasım 1922'de kaldırılmıştır."],
+["İnkılap Tarihi","Osmanlı'dan Cumhuriyete","Cumhuriyet hangi yıl ilan edilmiştir?",["1920","1922","1923","1924"],2,"Cumhuriyet 29 Ekim 1923'te ilan edilmiştir."],
+["İnkılap Tarihi","Osmanlı'dan Cumhuriyete","Millî Mücadele'nin başlangıcı kabul edilen olay hangisidir?",["Sakarya Savaşı","19 Mayıs 1919'da Samsun'a çıkış","Lozan Antlaşması","Mudanya Ateşkesi"],1,"Mustafa Kemal'in Samsun'a çıkışı 19 Mayıs 1919'dadır."],
+["İnkılap Tarihi","Osmanlı'dan Cumhuriyete","TBMM hangi tarihte açılmıştır?",["23 Nisan 1920","29 Ekim 1923","19 Mayıs 1919","1 Kasım 1922"],0,"TBMM 23 Nisan 1920'de açılmıştır."],
+["İnkılap Tarihi","Milli Mücadele","Erzurum ve Sivas Kongreleri'nin temel amacı nedir?",["Millî birliği sağlamak","Padişahı tahttan indirmek","Antlaşma imzalamak","Yabancı ordulara katılmak"],0,"Kongreler, ulusal birliği ve ortak kararı sağlamayı amaçlamıştır."],
+["İnkılap Tarihi","Milli Mücadele","Sevr Antlaşması hangi taraflar arasında imzalanmıştır?",["Osmanlı Devleti ile İtilaf Devletleri","Türkiye ile Yunanistan","Türkiye ile Sovyetler Birliği","Osmanlı Devleti ile Almanya"],0,"Sevr, Osmanlı Devleti ile İtilaf Devletleri arasında imzalanmıştır."],
+["İnkılap Tarihi","Milli Mücadele","Büyük Taarruz hangi yıl gerçekleşmiştir?",["1919","1921","1922","1923"],2,"Büyük Taarruz 1922'de başlamış ve Yunan ordusu geri çekilmiştir."],
+["İnkılap Tarihi","Milli Mücadele","Kurtuluş Savaşı'nın ardından imzalanan ve uluslararası kabul sağlayan antlaşma hangisidir?",["Sevr","Lozan","Mudanya","Montrö"],1,"Lozan Antlaşması, Türkiye'nin egemenliğini uluslararası alanda kabul ettirmiştir."],
+["İnkılap Tarihi","Atatürk ilkeleri ve inkılaplar","Atatürk ilkeleri kaç tanedir?",["4","5","6","7"],2,"Atatürk ilkeleri altı tanedir."],
+["İnkılap Tarihi","Atatürk ilkeleri ve inkılaplar","Din ile devlet işlerinin ayrılmasını anlatan ilke hangisidir?",["Laiklik","Halkçılık","Cumhuriyetçilik","İnkılapçılık"],0,"Laiklik, din ve devlet işlerinin ayrılmasıdır."],
+["İnkılap Tarihi","Atatürk ilkeleri ve inkılaplar","Harf inkılabı hangi yıl yapılmıştır?",["1924","1926","1928","1934"],2,"Latin alfabesi 1928'de kabul edilmiştir."],
+["İnkılap Tarihi","Atatürk ilkeleri ve inkılaplar","Kadınlara milletvekili seçme ve seçilme hakkı hangi yılda verilmiştir?",["1930","1934","1926","1937"],1,"Kadınlar 1934'te milletvekili seçme ve seçilme hakkını kazanmıştır."],
+
+["Din Kültürü","İbadet","İslam'ın beş şartından biri olan ibadet hangisidir?",["Zekât","Tevekkül","Sabır","Şükür"],0,"Zekât, İslam'ın beş şartından biridir."],
+["Din Kültürü","İbadet","Ramazan ayında tutulan ibadet hangisidir?",["Hac","Oruç","Namaz","Zekât"],1,"Oruç Ramazan ayında tutulur."],
+["Din Kültürü","İbadet","Hacca gitmek için hangi şart gereklidir?",["Maddi ve bedensel gücün yeterli olması","Belirli bir yaşın altında olmak","Ücretsiz izin almak","Hacı bir aileden gelmek"],0,"Hac, gücü yeten müslümanlara farzdır."],
+["Din Kültürü","İbadet","Bir günde kılınan farz namaz vakti sayısı kaçtır?",["3","4","5","6"],2,"Günlük farz namaz vakti beştir."],
+["Din Kültürü","İman esasları","İman esasları kaç tanedir?",["4","5","6","7"],2,"İman esası altı tanedir."],
+["Din Kültürü","İman esasları","Aşağıdakilerden hangisi iman esaslarından değildir?",["Melekler","Kitaplar","Ahiret","Namaz"],3,"Namaz bir ibadettir, iman esası değildir."],
+["Din Kültürü","İman esasları","Kader inancı neyi anlatır?",["Her şeyin Allah'ın bilgi ve takdiriyle olduğuna inanmak","Her şeyin tamamen şansa bağlı olduğu","İnsanın hiçbir sorumluluğunun olmadığı","Ahiretin bulunmadığı"],0,"Kader, Allah'ın bilgi ve takdirine iman etmektir."],
+["Din Kültürü","İman esasları","Peygamberlerin temel görevi nedir?",["İnsanları doğru yola çağırmak","Savaş yapmak","Ticaret yapmak","Devlet kurmak"],0,"Peygamberler insanları doğru yola ve Allah'ın emirlerine çağırmıştır."],
+["Din Kültürü","Ahlak","Doğruluk nedir?",["Sözünde ve davranışında samimi olmak","Her zaman kazanmak","Başkasını yanıltmak","Gerektiğinde yalan söylemek"],0,"Doğruluk, söz ve davranışta samimi olmaktır."],
+["Din Kültürü","Ahlak","Aşağıdakilerden hangisi yardımseverlik örneğidir?",["İhtiyaç sahibine yardım etmek","Arkadaşını kıskanmak","Sözünü tutmamak","Başkasının eşyasını almak"],0,"İhtiyaç sahibine yardım etmek yardımseverliktir."],
+["Din Kültürü","Ahlak","Alçakgönüllülük nedir?",["Kendini başkalarından üstün görmemek","Kendini küçük görmek","Hiç konuşmamak","Herkesle tartışmak"],0,"Alçakgönüllü olmak, kendini üstün görmemektir."],
+["Din Kültürü","Ahlak","Adalet ne demektir?",["Herkese hakkını vermek","Yalnızca yakınlarını korumak","Güçlüden yana olmak","Kuralları yok saymak"],0,"Adalet, herkese hakkını vermektir."],
+
+["İngilizce","Present simple","She ___ to school every day. (go)",["go","goes","going","gone"],1,"Üçüncü tekil şahısta present simple'da fiile -s/-es eklenir."],
+["İngilizce","Present simple","They ___ English on Mondays. (have)",["has","have","having","had"],1,"They ile present simple'da “have” kullanılır."],
+["İngilizce","Present simple","Choose the correct question: ___ you like tea?",["Do","Does","Are","Is"],0,"You ile soru yapılırken “do” kullanılır."],
+["İngilizce","Present simple","Ahmet ___ football on Sundays. (play)",["play","plays","playing","played"],1,"Ahmet üçüncü tekil şahıstır; “plays” doğrudur."],
+["İngilizce","Past simple","I ___ a book yesterday. (read)",["read","reads","reading","readed"],0,"“Read” geçmiş zamanda da aynı yazılır ama okunuşu farklıdır."],
+["İngilizce","Past simple","We ___ to Istanbul last year. (go)",["go","went","gone","goes"],1,"“Go”nun geçmiş zaman hâli “went”tir."],
+["İngilizce","Past simple","Did she ___ the door? (close)",["closed","closes","close","closing"],2,"Did'den sonra fiilin yalın hâli gelir."],
+["İngilizce","Past simple","They ___ happy yesterday. (be)",["was","were","are","be"],1,"They ile geçmiş zamanda “were” kullanılır."],
+["İngilizce","Daily life","What do you use to write on paper?",["Pen","Fork","Spoon","Window"],0,"Kâğıda yazmak için kalem (pen) kullanılır."],
+["İngilizce","Daily life","Where do you buy bread?",["Bakery","Hospital","Library","Airport"],0,"Ekmek fırın ya da ekmekçide (bakery) alınır."],
+["İngilizce","Daily life","What is the opposite of “cold”?",["Hot","Wet","Dry","Dark"],0,"“Cold”un zıt anlamlısı “hot”tur."],
+["İngilizce","Daily life","Which one is a fruit?",["Carrot","Banana","Potato","Onion"],1,"Muz bir meyvedir."],
+["Matematik","Çarpanlar ve katlar","36 ve 48 sayılarının EBOB'u kaçtır?",["6","12","16","24"],1,"36 = 2²·3², 48 = 2⁴·3; EBOB = 2²·3 = 12."],
+["Matematik","Çarpanlar ve katlar","12 ve 18 sayılarının EKOK'u kaçtır?",["36","6","72","24"],0,"12 = 2²·3, 18 = 2·3²; EKOK = 2²·3² = 36."],
+["Matematik","Çarpanlar ve katlar","Aşağıdakilerden hangisi 60 sayısının asal çarpanlarından biridir?",["2","4","6","9"],0,"60 = 2²·3·5; asal çarpanlar 2, 3 ve 5'tir."],
+["Matematik","Üslü ifadeler","3⁴ · 3² işleminin sonucu hangisidir?",["3⁶","3⁸","9⁶","6⁶"],0,"Tabanlar aynıysa üsler toplanır: 3^(4+2) = 3⁶."],
+["Matematik","Üslü ifadeler","(2³)² işleminin sonucu hangisidir?",["2⁵","2⁶","2⁹","4⁵"],1,"(a^m)^n = a^(m·n); 2^(3·2) = 2⁶."],
+["Matematik","Üslü ifadeler","5⁰ işleminin sonucu kaçtır?",["0","1","5","Tanımsız"],1,"Sıfırdan farklı her sayının sıfırıncı kuvveti 1'dir."],
+["Matematik","Kareköklü ifadeler","√49 kaçtır?",["7","24","14","9"],0,"7 · 7 = 49."],
+["Matematik","Kareköklü ifadeler","√8 + √2 işleminin sonucu hangisidir?",["√10","2√10","3√2","√6"],2,"√8 = 2√2; 2√2 + √2 = 3√2."],
+["Matematik","Kareköklü ifadeler","√50 ifadesinin sadeleştirilmiş hâli hangisidir?",["2√5","5√2","√25","10√5"],1,"50 = 25 · 2, √50 = 5√2."],
+["Matematik","Veri analizi","4, 6, 8, 10 ve 12 sayılarının aritmetik ortalaması kaçtır?",["6","8","9","10"],1,"(4 + 6 + 8 + 10 + 12) / 5 = 8."],
+["Matematik","Veri analizi","1, 3, 5, 7, 9 değerlerinin medyanı (ortanca değeri) kaçtır?",["3","5","7","9"],1,"Veriler zaten sıralıdır; ortadaki değer 5'tir."],
+["Matematik","Veri analizi","Hangisi mod (tepe değer) tanımıdır?",["En büyük değer","En çok tekrar eden değer","Ortadaki değer","Değerlerin toplamı"],1,"Mod, veri kümesinde en çok tekrar eden değerdir."],
+["Matematik","Olasılık","Bir zar atıldığında asal sayı gelme olasılığı kaçtır?",["1/6","1/3","1/2","2/3"],2,"Asal sayılar 2, 3, 5: 3/6 = 1/2."],
+["Matematik","Olasılık","Bir torbada 4 beyaz ve 6 siyah bilye vardır. Rastgele çekilen bilyenin beyaz olma olasılığı kaçtır?",["2/5","3/5","4/6","1/4"],0,"Toplam 10 bilyenin 4'ü beyaz: 4/10 = 2/5."],
+["Matematik","Olasılık","Bir olayın olasılığı hangi aralıkta değer alır?",["0 ile 1 arasında","−1 ile 1 arasında","0 ile 100 arasında","1 ile 10 arasında"],0,"Olasılık 0 (imkânsız) ile 1 (kesin) arasındadır."],
+["Matematik","Cebirsel ifadeler","2x + 3x işleminin sonucu hangisidir?",["5x²","5x","6x","x²"],1,"Benzer terimlerin katsayıları toplanır: 5x."],
+["Matematik","Cebirsel ifadeler","(x + 4)(x − 4) çarpımının sonucu hangisidir?",["x² − 16","x² + 16","x² − 8x + 16","x² − 4"],0,"İki kare farkı: (a + b)(a − b) = a² − b²."],
+["Matematik","Cebirsel ifadeler","(x + 3)² ifadesinin açılımı hangisidir?",["x² + 9","x² + 6x + 9","x² + 3x + 9","x² + 6x + 3"],1,"(a + b)² = a² + 2ab + b²; 2 · x · 3 = 6x."],
+["Matematik","Eşitsizlik","x + 3 > 7 eşitsizliğinin çözüm kümesi hangisidir?",["x > 4","x < 4","x > 10","x < 10"],0,"x > 7 − 3 = 4."],
+["Matematik","Eşitsizlik","−2x > 6 eşitsizliğinde x hangi aralıktadır?",["x > −3","x < −3","x > 3","x < 3"],1,"Her iki taraf −2'ye bölününce eşitsizlik yön değiştirir: x < −3."],
+["Matematik","Eşitsizlik","2 ≤ x < 5 aralığında kaç tam sayı vardır?",["2","3","4","5"],1,"Bu aralıktaki tam sayılar 2, 3 ve 4'tür."],
+["Matematik","Eşlik ve benzerlik","Karşılık gelen açıları eşit olan iki üçgen nasıl adlandırılır?",["Eş","Benzer","Dik","Eşkenar"],1,"Açıları eşit fakat boyutları farklı olan üçgenler benzerdir."],
+["Matematik","Eşlik ve benzerlik","Benzerlik oranı 2 olan iki üçgende karşılık gelen kenarların oranı kaçtır?",["1/2","2","4","1"],1,"Karşılık gelen kenarların oranı benzerlik oranına eşittir."],
+["Matematik","Eşlik ve benzerlik","Eş üçgenlerde karşılık gelen kenarlar nasıldır?",["Farklıdır","Eşittir","Orantılıdır","Toplamı 180'dir"],1,"Eş şekillerin karşılık gelen kenarları ve açıları eşittir."],
+["Matematik","Pisagor","Dik kenarları 6 cm ve 8 cm olan üçgenin hipotenüsü kaç cm'dir?",["10","12","14","7"],0,"√(36 + 64) = √100 = 10."],
+["Matematik","Pisagor","Hipotenüsü 13 cm, bir dik kenarı 5 cm olan üçgenin diğer dik kenarı kaç cm'dir?",["8","10","12","144"],2,"13² − 5² = 169 − 25 = 144; √144 = 12."],
+["Matematik","Pisagor","Pisagor bağıntısı hangi üçgende geçerlidir?",["Dik üçgende","Eşkenar üçgende","Her üçgende","İkizkenar üçgende"],0,"a² + b² = c² bağıntısı yalnızca dik üçgende geçerlidir."],
+["Matematik","Dönüşüm geometrisi","Bir şeklin bir doğruya göre simetriğinin alınmasına ne ad verilir?",["Öteleme","Yansıma","Dönme","Büyütme"],1,"Yansıma, şeklin bir doğruya göre aynasını alma işlemidir."],
+["Matematik","Dönüşüm geometrisi","Bir şekli bir nokta etrafında belirli bir açı kadar döndürmeye ne ad verilir?",["Dönme","Yansıma","Öteleme","Benzerlik"],0,"Dönme, şekli sabit bir nokta etrafında döndürür."],
+["Matematik","Dönüşüm geometrisi","Öteleme dönüşümünde şekle ne olur?",["Boyutu değişir","Yalnızca yer değiştirir","Ters çevrilir","Döner"],1,"Öteleme şekli kaydırır; şekil ve boyutu değişmez."],
+["Matematik","Geometrik cisimler","Bir küpün kaç yüzü vardır?",["4","6","8","12"],1,"Küpün altı eş karesi vardır."],
+["Matematik","Geometrik cisimler","Silindirin hacmi için hangisi doğrudur?",["Taban alanı · yükseklik","Taban alanı · yükseklik / 3","2 · π · r","π · r²"],0,"Prizma ve silindirde hacim, taban alanı ile yüksekliğin çarpımıdır."],
+["Matematik","Geometrik cisimler","Dik bir prizmanın yan yüzleri hangi şekillerdir?",["Üçgen","Dikdörtgen","Daire","Yamuk"],1,"Dik prizmanın yan yüzleri dikdörtgendir."],
+["Matematik","Yüzde ve oran-orantı","Bir ürünün fiyatı %20 artarsa yeni fiyat, eski fiyatın yüzde kaçı olur?",["%80","%100","%120","%140"],2,"Fiyat 1,20 ile çarpılır: eski fiyatın %120'si."],
+["Matematik","Yüzde ve oran-orantı","3 kalem 12 TL ise 7 kalem kaç TL eder?",["24","28","30","32"],1,"Bir kalem 4 TL; 7 · 4 = 28 TL."],
+["Matematik","Yüzde ve oran-orantı","2 / 5 = x / 10 orantısında x kaçtır?",["2","4","5","25"],1,"5x = 20 ise x = 4."],
+["Türkçe","Noktalama işaretleri","Kısaltmalardan sonra hangi işaret konur?",["Nokta","Virgül","Ünlem","Noktalı virgül"],0,"Dr., Prof., Av. gibi kısaltmalardan sonra nokta konur."],
+["Türkçe","Noktalama işaretleri","Aşağıdaki cümlelerin hangisinde virgül doğru kullanılmıştır?",["Ali Ayşe ve Can geldi.","Kitap, defter ve kalem aldım.","Sabah erken, kalktım.","Ankara, başkenttir."],1,"Sıralanan öğeler arasında virgül kullanılır."],
+["Türkçe","Noktalama işaretleri","Hangi cümlenin sonuna soru işareti konur?",["Bugün hava çok güzel","Bu kitabı okudun mu","Ne kadar güzel bir gün","Gel buraya"],1,"Soru cümlesinin sonuna soru işareti konur."],
+["Türkçe","Fiilimsiler","“Okuyan çocuk başarılı oldu.” cümlesindeki “okuyan” hangi fiilimsidir?",["İsim-fiil","Sıfat-fiil","Zarf-fiil","Fiil"],1,"İsmi niteleyen fiilimsi sıfat-fiildir."],
+["Türkçe","Fiilimsiler","“Koşarak” sözcüğü hangi fiilimsidir?",["Zarf-fiil","Sıfat-fiil","İsim-fiil","Yalın fiil"],0,"Fiilin nasıl yapıldığını gösteren fiilimsi zarf-fiildir."],
+["Türkçe","Fiilimsiler","“Gelmek için acele etti.” cümlesindeki “gelmek” hangi fiilimsidir?",["İsim-fiil","Sıfat-fiil","Zarf-fiil","Ek-fiil"],0,"-mek ekiyle isim olan fiilimsi isim-fiildir."],
+["Türkçe","Sözcükte anlam","“Sert” sözcüğünün zıt anlamlısı hangisidir?",["Yumuşak","Ağır","Kaba","Dar"],0,"Sert'in karşıtı yumuşak'tır."],
+["Türkçe","Sözcükte anlam","Gerçek anlam ile mecaz anlam arasındaki fark nedir?",["Gerçek anlam sözcüğün temel anlamıdır; mecaz anlam bağlama göre kazanılan yeni anlamdır.","Mecaz anlam sözlükte yoktur.","Gerçek anlam yalnızca şiirde kullanılır.","İkisi aynı anlama gelir."],0,"Mecaz anlam, sözcüğün bağlamda kazandığı yeni anlamdır."],
+["Türkçe","Sözcükte anlam","“Yüreği yanmak” sözünde hangi anlam vardır?",["Gerçek anlam","Mecaz anlam","Eş anlam","Zıt anlam"],1,"Yüreğin yanması üzülmek anlamında kullanılmıştır: mecazdır."],
+["Türkçe","Söz sanatları","“Rüzgâr fısıldıyordu.” cümlesinde hangi söz sanatı vardır?",["Benzetme","Kişileştirme","Abartma","Tezat"],1,"Rüzgâra insana özgü bir davranış verilmiştir: kişileştirme."],
+["Türkçe","Söz sanatları","“Gözlerim kadar koyu bir gece.” cümlesinde hangi söz sanatı vardır?",["Benzetme","Kişileştirme","Tezat","Yineleme"],0,"Gece ile göz arasında “kadar” bağlacıyla benzerlik kurulmuştur."],
+["Türkçe","Söz sanatları","“Bin kere söyledim, hâlâ anlamadı.” cümlesinde hangi söz sanatı vardır?",["Abartma","Tezat","Kişileştirme","Benzetme"],0,"“Bin kere” sayısı durumu olduğundan büyük gösterir: abartma."],
+["Türkçe","Anlatım biçimleri","Bir olayın zaman sırasına göre anlatılması hangi anlatım biçimidir?",["Öyküleme","Betimleme","Tartışma","Açıklama"],0,"Olayların başlangıçtan sona anlatılması öyküleme ile yapılır."],
+["Türkçe","Anlatım biçimleri","Bir varlığın renk, şekil ve kokusunun anlatılması hangi anlatım biçimidir?",["Betimleme","Öyküleme","Tartışma","Açıklama"],0,"Varlıkların özelliklerini anlatmak betimlemedir."],
+["Türkçe","Anlatım biçimleri","Bir düşüncenin kanıtlarla savunulması hangi anlatım biçimidir?",["Tartışma","Betimleme","Açıklama","Öyküleme"],0,"Savunma ve kanıt sunma tartışma biçiminin özelliğidir."],
+["Türkçe","Paragraf","Paragrafın ana düşüncesi nasıl bulunur?",["Paragrafın tamamını kapsayan ve yazarın asıl vurguladığı düşünce seçilir.","Paragrafın en uzun cümlesi seçilir.","İlk cümle her zaman ana düşüncedir.","Son cümle çıkarılır."],0,"Ana düşünce paragrafın bütününü kapsar."],
+["Türkçe","Paragraf","Yardımcı düşünceler paragrafta ne işe yarar?",["Ana düşünceyi destekler ve açıklar.","Konuyu değiştirir.","Paragrafı kısaltır.","Yazarın kimliğini verir."],0,"Yardımcı düşünceler ana düşünceyi güçlendirir."],
+["Türkçe","Paragraf","Paragrafta konu nedir?",["Paragrafta üzerinde durulan genel varlık ya da olay","Paragrafın son cümlesi","Yazarın adı","Paragraftaki en önemli sözcük"],0,"Konu, paragrafın hakkında olduğu genel varlık ya da olaydır."],
+["Türkçe","Atasözleri ve deyimler","“Ayağını yorganına göre uzat.” atasözü neyi anlatır?",["Gücünü ve imkânlarını aşmamak gerektiğini","Tembelliği","Sürekli para biriktirmeyi","Yorgunluğu"],0,"Atasözü, imkânlara göre hareket etmeyi öğütler."],
+["Türkçe","Atasözleri ve deyimler","“Kulak vermek” deyiminin anlamı nedir?",["Dinlemek, önem vermek","Kulağı ağrımak","Bir şey işitmemek","Yüksek sesle konuşmak"],0,"Deyim, dikkatle dinlemek anlamındadır."],
+["Türkçe","Atasözleri ve deyimler","“Göz doldurmak” deyimi ne anlama gelir?",["Beğendirmek, dikkat çekmek","Göz muayenesi yaptırmak","Ağlamak","Uyumak"],0,"Deyim, dikkat çekici ve beğenilir olmak anlamındadır."],
+["Türkçe","Anlatım bozukluğu","Hangi cümlede anlatım bozukluğu vardır?",["Sadece bir tek kişi geldi.","Tüm öğrenciler geldi.","Kitabı dikkatle okudu.","Yarın yağmur yağacak."],0,"“Sadece” ve “tek” aynı anlamı tekrarlar."],
+["Türkçe","Anlatım bozukluğu","Hangi sözcük grubunda anlatım bozukluğu vardır?",["En çok en güzel","Çok güzel","Çok iyi bir kitap","Dün gelen misafir"],0,"“En çok” ve “en güzel” birlikte üstünlüğü iki kez anlatır."],
+["Türkçe","Anlatım bozukluğu","Aşağıdaki cümlelerin hangisinde gereksiz sözcük tekrarı vardır?",["Peşinen önceden haber verdi.","Yarın gelecek.","Dün akşam gitti.","Kitabı okudu."],0,"“Peşinen” ve “önceden” aynı anlamı taşır."],
+
+["Fen Bilimleri","Elektrik","Bir devrede akımın birimi hangisidir?",["Volt","Amper","Ohm","Watt"],1,"Elektrik akımının birimi amperdir."],
+["Fen Bilimleri","Elektrik","Pilleri seri bağladığımızda devrenin toplam gerilimi nasıl değişir?",["Tek pilden daha büyük olur.","Tek pilden daha küçük olur.","Değişmez.","Sıfır olur."],0,"Seri bağlamada pillerin gerilimleri toplanır."],
+["Fen Bilimleri","Elektrik","Aşağıdakilerden hangisi iyi bir iletkendir?",["Bakır","Plastik","Tahta","Cam"],0,"Metaller elektriği iyi iletir; bakır iyi bir iletkendir."],
+["Fen Bilimleri","Işık","Işığın düz bir yüzeyden geri dönmesine ne ad verilir?",["Kırılma","Yansıma","Soğurulma","Saçılma"],1,"Işığın yüzeyden geri dönmesi yansımadır."],
+["Fen Bilimleri","Işık","Işığın bir ortamdan başka bir ortama geçerken yön değiştirmesine ne ad verilir?",["Kırılma","Yansıma","Gölge","Girişim"],0,"Farklı ortamlarda hız değiştiği için ışık kırılır."],
+["Fen Bilimleri","Işık","Gölge oluşumu hangi özellikle açıklanır?",["Işığın doğrusal yayılması","Işığın kırılması","Işığın renkleri","Işığın hızının sıfır olması"],0,"Işık doğrusal yayıldığı için engelin arkasında gölge oluşur."],
+["Fen Bilimleri","Basınç","Basınç hangi bağıntıyla hesaplanır?",["P = F / A","P = F · A","P = m / V","P = F + A"],0,"Basınç, kuvvetin yüzey alanına bölümüdür."],
+["Fen Bilimleri","Basınç","Aynı kuvvet daha küçük bir alana uygulanırsa basınç nasıl değişir?",["Artar","Azalır","Değişmez","Sıfır olur"],0,"Alan küçüldükçe basınç artar."],
+["Fen Bilimleri","Basınç","Sıvıların basıncı derinlikle nasıl değişir?",["Derinlik arttıkça artar.","Derinlik arttıkça azalır.","Değişmez.","Yalnızca sıcaklığa bağlıdır."],0,"Sıvı derinliği arttıkça basınç da artar."],
+["Fen Bilimleri","Dünya ve Evren","Dünya'nın kendi ekseni etrafında bir tam dönüşü kaç saat sürer?",["12","24","365","30"],1,"Gece ve gündüzü oluşturan dönüş 24 saattir."],
+["Fen Bilimleri","Dünya ve Evren","Gece ve gündüz hangi hareketin sonucunda oluşur?",["Dünya'nın kendi ekseni etrafındaki dönme hareketi","Dünya'nın Güneş etrafındaki dolanma hareketi","Ay'ın dönmesi","Güneş'in hareketi"],0,"Dünya kendi ekseni etrafında döndükçe gece ve gündüz oluşur."],
+["Fen Bilimleri","Dünya ve Evren","Gezegenler Güneş'in etrafında hangi hareketi yapar?",["Dolanma","Dönme","Kayma","Titreşim"],0,"Gezegenler Güneş'in etrafında dolanır."],
+["Fen Bilimleri","Kalıtım ve üreme","Kalıtsal bilgiyi taşıyan yapı hangisidir?",["Gen","Hücre zarı","Ribozom","Kloroplast"],0,"Genler kalıtsal özellikleri taşır."],
+["Fen Bilimleri","Kalıtım ve üreme","Eşeyli üreme için hangisi gereklidir?",["Dişi ve erkek üreme hücrelerinin birleşmesi","Hücrenin ikiye bölünmesi","Yalnızca bir ebeveyn","Tomurcuklanma"],0,"Eşeyli üremede iki farklı üreme hücresi birleşir."],
+["Fen Bilimleri","Kalıtım ve üreme","Aşağıdakilerden hangisi eşeysiz üreme örneğidir?",["Tomurcuklanma","Döllenme","Tohumla üreme","Yumurta ve sperm birleşmesi"],0,"Tomurcuklanmada tek ebeveyn yeni birey oluşturur."],
+["Fen Bilimleri","Ekosistem ve enerji","Besin zincirinde ilk halka hangisidir?",["Üretici","Tüketici","Ayrıştırıcı","Avcı"],0,"Besin zincirinin başında üreticiler yer alır."],
+["Fen Bilimleri","Ekosistem ve enerji","Ekosistemde enerji nasıl akar?",["Üreticiden tüketiciye doğru tek yönlü","Tüketiciden üreticiye","Her yönde eşit","Enerji akmaz"],0,"Enerji güneşten üreticilere, oradan tüketicilere akar."],
+["Fen Bilimleri","Ekosistem ve enerji","Ayrıştırıcılara örnek hangisidir?",["Mantar","Ot","Kuş","Geyik"],0,"Mantarlar ve bakteriler ölü maddeleri ayrıştırır."],
+["Fen Bilimleri","Asitler ve bazlar","pH değeri 7'den küçük olan çözelti nasıldır?",["Asidik","Bazik","Nötr","Tuzlu"],0,"pH 7'nin altındaki çözeltiler asidiktir."],
+["Fen Bilimleri","Asitler ve bazlar","Asit ile bazın birbirini nötrleştirmesine ne ad verilir?",["Nötrleşme","Yoğunlaşma","Erime","Kaynama"],0,"Asit ve baz tepkimesi nötrleşme olarak adlandırılır."],
+["Fen Bilimleri","Asitler ve bazlar","Aşağıdakilerden hangisi bazik bir çözeltidir?",["Çamaşır suyu","Limon suyu","Sirke","Sofra tuzu çözeltisi"],0,"Çamaşır suyu bazik özellik taşır."],
+["Fen Bilimleri","Ses","Ses hangi ortamda yayılamaz?",["Boşlukta","Havada","Suda","Katıda"],0,"Ses yayılmak için maddesel bir ortama ihtiyaç duyar."],
+["Fen Bilimleri","Ses","Sesin şiddeti neye bağlıdır?",["Titreşimin genliğine","Sesin rengine","Yalnızca frekansa","Ortamın rengine"],0,"Genlik arttıkça ses daha şiddetli duyulur."],
+["Fen Bilimleri","Ses","Bir saniyedeki titreşim sayısına ne ad verilir?",["Frekans","Genlik","Periyot","Hız"],0,"Frekans, saniyedeki titreşim sayısıdır."],
+
+["İnkılap Tarihi","Mondros ve Sevr dönemi","Mondros Mütarekesi hangi yıl imzalanmıştır?",["1918","1919","1920","1923"],0,"Mondros Mütarekesi 1918'de imzalanmıştır."],
+["İnkılap Tarihi","Mondros ve Sevr dönemi","Sevr Antlaşması'nın Türk halkı açısından temel sonucu nedir?",["Ülkenin parçalanmasının kabul edilmesi","Bağımsızlığın tanınması","Yeni bir devletin kurulması","Barış ve eşitlik"],0,"Sevr, ülkenin parçalanmasını öngörüyordu."],
+["İnkılap Tarihi","Mondros ve Sevr dönemi","Mondros sonrası işgal edilen başlıca yerler hangileridir?",["İstanbul ve Anadolu'nun önemli kesimleri","Yalnızca Ege adaları","Yalnızca Kafkasya","Yalnızca Rumeli"],0,"Mondros sonrası İstanbul ve birçok önemli bölge işgal edildi."],
+["İnkılap Tarihi","Dış politika","Atatürk dönemi dış politikasının temel ilkesi nedir?",["Yurtta sulh, cihanda sulh","Savaşa hazırlık","Sömürgecilik","Askerî ittifak"],0,"Barışçıl dış politika bu ilkeye dayanır."],
+["İnkılap Tarihi","Dış politika","Türkiye'nin Milletler Cemiyeti'ne katılması hangi yıl gerçekleşmiştir?",["1932","1923","1918","1945"],0,"Türkiye 1932'de Milletler Cemiyeti'ne üye olmuştur."],
+["İnkılap Tarihi","Dış politika","Balkan Antantı hangi amaçla kurulmuştur?",["Balkanlarda barış ve güvenliği korumak","Savaş için ittifak kurmak","Sömürge paylaşmak","Ekonomik tekel kurmak"],0,"Balkan Antantı bölgesel barış ve güvenliği amaçlıyordu."],
+["İnkılap Tarihi","Milli eğitim inkılapları","Tevhid-i Tedrisat hangi yıl kabul edilmiştir?",["1924","1926","1928","1934"],0,"Tevhid-i Tedrisat Kanunu 1924'te kabul edildi."],
+["İnkılap Tarihi","Milli eğitim inkılapları","Köy Enstitüleri hangi amaçla kurulmuştur?",["Köylerde eğitimi yaygınlaştırmak","Yabancı dil öğretmek","Askerî eğitim vermek","Sanat okulu açmak"],0,"Köy Enstitüleri kırsal kesimde eğitimi amaçladı."],
+["İnkılap Tarihi","Milli eğitim inkılapları","Halkevleri hangi amaçla kurulmuştur?",["Halkı eğitmek ve kültürel gelişimi sağlamak","Ticaret yapmak","Savaş planlamak","Vergi toplamak"],0,"Halkevleri eğitim ve kültür faaliyetleri için kuruldu."],
+["İnkılap Tarihi","Hukuk inkılapları","Medeni Kanun hangi yıl kabul edilmiştir?",["1926","1924","1928","1934"],0,"Medeni Kanun 1926'da kabul edildi."],
+["İnkılap Tarihi","Hukuk inkılapları","Medeni Kanun'un getirdiği temel yenilik nedir?",["Kadın-erkek eşitliği yönünde adımlar atılması","Çok eşliliğin yasallaşması","Şeriatın yeniden yürürlüğe girmesi","Dinî mahkemelerin kurulması"],0,"Medeni Kanun, aile hukukunda eşitlik yönünde değişiklikler getirdi."],
+["İnkılap Tarihi","Hukuk inkılapları","Türk Ceza Kanunu hangi yıl kabul edilmiştir?",["1926","1923","1930","1934"],0,"Türk Ceza Kanunu 1926'da kabul edildi."],
+["İnkılap Tarihi","Ekonomi politikaları","Birinci Beş Yıllık Sanayi Planı hangi yıl uygulanmaya başlanmıştır?",["1934","1923","1938","1928"],0,"Birinci Beş Yıllık Sanayi Planı 1934'te başlatıldı."],
+["İnkılap Tarihi","Ekonomi politikaları","1930'larda uygulanan ekonomi politikası hangisidir?",["Devletçilik","Liberalizm","Sömürgecilik","Kapitülasyon"],0,"Devletçilik, ekonomide devletin etkin rol almasıdır."],
+["İnkılap Tarihi","Ekonomi politikaları","İzmir İktisat Kongresi hangi yıl toplanmıştır?",["1923","1920","1930","1934"],0,"İzmir İktisat Kongresi 1923'te toplandı."],
+["İnkılap Tarihi","Cumhuriyet'in ilk yılları","Cumhuriyet'in ilanından sonra başkent hangi şehir olmuştur?",["Ankara","İstanbul","İzmir","Bursa"],0,"Başkent 1923'ten itibaren Ankara'dır."],
+["İnkılap Tarihi","Cumhuriyet'in ilk yılları","Tek partili dönemde iktidardaki parti hangisidir?",["Cumhuriyet Halk Partisi","Demokrat Parti","Milli Birlik Partisi","Vatan Partisi"],0,"Tek parti dönemi Cumhuriyet Halk Partisi ile yaşandı."],
+["İnkılap Tarihi","Cumhuriyet'in ilk yılları","Cumhuriyet'in ilk yıllarında yaşanan iç isyanlardan biri hangisidir?",["Şeyh Sait İsyanı","Kurtuluş Savaşı'nın başlaması","Sevr'in imzalanması","Mondros'un imzalanması"],0,"Şeyh Sait İsyanı 1925'te yaşandı."],
+["İnkılap Tarihi","Atatürk dönemi kültür ve sanat","Türk Tarih Kurumu hangi yıl kurulmuştur?",["1931","1932","1923","1934"],0,"Türk Tarih Kurumu 1931'de kuruldu."],
+["İnkılap Tarihi","Atatürk dönemi kültür ve sanat","Türk Dil Kurumu hangi yıl kurulmuştur?",["1932","1931","1928","1934"],0,"Türk Dil Kurumu 1932'de kuruldu."],
+["İnkılap Tarihi","Atatürk dönemi kültür ve sanat","Ankara Devlet Konservatuvarı hangi alanda eğitim vermiştir?",["Müzik ve sanat","Askerlik","Ticaret","Tarım"],0,"Konservatuvar müzik ve sanat eğitimi için açıldı."],
+
+["Din Kültürü","Hz. Muhammed'in hayatı","Hz. Muhammed hangi şehirde doğmuştur?",["Mekke","Medine","Kudüs","Taif"],0,"Hz. Muhammed Mekke'de doğmuştur."],
+["Din Kültürü","Hz. Muhammed'in hayatı","Hicret neyi ifade eder?",["Mekke'den Medine'ye göç","Savaş ilanı","Hac ibadeti","Kur'an'ın indirilmesi"],0,"Hicret, Müslümanların Mekke'den Medine'ye göçüdür."],
+["Din Kültürü","Hz. Muhammed'in hayatı","İlk vahiy hangi mağarada gelmiştir?",["Hira","Sevr","Uhud","Safa"],0,"İlk vahiy Hira Mağarası'nda gelmiştir."],
+["Din Kültürü","Kur'an-ı Kerim","Kur'an-ı Kerim hangi dilde indirilmiştir?",["Arapça","Türkçe","İbranice","Farsça"],0,"Kur'an-ı Kerim Arapça olarak indirilmiştir."],
+["Din Kültürü","Kur'an-ı Kerim","Kur'an-ı Kerim kaç sureden oluşur?",["114","100","99","120"],0,"Kur'an-ı Kerim 114 sureden oluşur."],
+["Din Kültürü","Kur'an-ı Kerim","Kur'an-ı Kerim'in ilk indirilen suresi hangisidir?",["Alak","Fatiha","İhlas","Nas"],0,"İlk inen sure Alak suresidir."],
+["Din Kültürü","Peygamberler","Hz. Muhammed'in peygamberlik niteliği hangi kavramla ifade edilir?",["Son peygamber","İlk peygamber","Sahabi","Halife"],0,"Hz. Muhammed son peygamberdir."],
+["Din Kültürü","Peygamberler","Peygamberlerin ortak görevi nedir?",["Tek Allah'a iman etmeye çağırmak","Savaş yönetmek","Ticaret yapmak","Devlet kurmak"],0,"Bütün peygamberler tevhid inancına çağırmıştır."],
+["Din Kültürü","Peygamberler","Hz. İbrahim hangi değerle tanınır?",["Tevhid inancı ve sadakat","Askerlik","Ticaret","Şiir"],0,"Hz. İbrahim tevhid inancı ve sadakatiyle tanınır."],
+["Din Kültürü","Hac ve kurban","Hac ibadeti hangi ayda yapılır?",["Zilhicce","Ramazan","Muharrem","Recep"],0,"Hac, Zilhicce ayında yapılır."],
+["Din Kültürü","Hac ve kurban","Kurban ibadetinin anlamı nedir?",["Allah rızası için fedakârlık ve paylaşma","Gösteriş yapmak","Et yemek","Borç ödemek"],0,"Kurban, fedakârlık ve paylaşmanın sembolüdür."],
+["Din Kültürü","Hac ve kurban","Kurban Bayramı hangi günlerde kutlanır?",["Zilhicce ayının 10-13. günleri","Ramazan ayı","Şaban ayı","Muharrem ayının 1. günü"],0,"Kurban Bayramı Zilhicce'nin 10. gününde başlar."],
+["Din Kültürü","Dinî kavramlar","Tevekkül nedir?",["Çabayı gösterip sonucu Allah'a bırakmak","Her şeyi bırakıp oturmak","Gösteriş yapmak","Zengin olmak"],0,"Tevekkül, çalışıp sonucu Allah'a bırakmaktır."],
+["Din Kültürü","Dinî kavramlar","Hayır ve şer kavramları neyi anlatır?",["İyilik ve kötülük","Yiyecek ve içecek","Yöneticiler","Şehirler"],0,"Hayır iyiliği, şer kötülüğü anlatır."],
+["Din Kültürü","Dinî kavramlar","Takva ne demektir?",["Allah'tan sakınmak ve kötülükten kaçınmak","Yüksek sesle konuşmak","Gösterişli giyinmek","Çok para biriktirmek"],0,"Takva, Allah'a karşı sorumluluk bilinciyle yaşamaktır."],
+["Din Kültürü","Din ve hayat","Din bireyin hayatına nasıl etki eder?",["Değerleri ve davranışları yönlendirir.","Hiçbir etkisi yoktur.","Yalnızca bayramlarda görünür.","Ekonomiyi belirler."],0,"Din, inanç ve ahlak yoluyla davranışları yönlendirir."],
+["Din Kültürü","Din ve hayat","Dinî bilgilerin doğru yorumlanması neden önemlidir?",["Yanlış anlamaları önler.","Sınavı kolaylaştırır.","Yalnızca ezber sağlar.","Ünlü olmaya yardımcı olur."],0,"Doğru bilgi yanlış anlamaların önüne geçer."],
+["Din Kültürü","Din ve hayat","Müslümanlar arasında hoşgörü neyi güçlendirir?",["Toplumsal barış ve birliği","Rekabeti","Bencilliği","Ayrılığı"],0,"Hoşgörü toplumsal barış ve birliği destekler."],
+
+["İngilizce","Future","Tomorrow, I ___ visit my grandmother.",["will","am will","wills","willing"],0,"Anlık kararlar için will kullanılır."],
+["İngilizce","Future","They ___ going to play tennis this weekend.",["am","is","are","be"],2,"They ile are kullanılır: they are going to."],
+["İngilizce","Future","Look at the clouds! It ___ rain.",["is going to","are going to","goes","will to"],0,"Kanıta dayalı tahmin için be going to kullanılır."],
+["İngilizce","Present continuous","Look! Ali ___ football now.",["plays","is playing","played","play"],1,"Şu anda devam eden eylem: is playing."],
+["İngilizce","Present continuous","We ___ dinner at the moment.",["are cooking","cook","cooked","cooks"],0,"At the moment şimdiki zaman devam eden eylem için kullanılır."],
+["İngilizce","Present continuous","She isn't ___ TV now.",["watching","watches","watched","watch"],0,"Olumsuz present continuous: isn't + fiil-ing."],
+["İngilizce","Comparatives","This book is ___ than that one.",["more interesting","interestinger","most interesting","as interesting than"],0,"Uzun sıfatların karşılaştırması more ile yapılır."],
+["İngilizce","Comparatives","Ahmet is ___ than Can.",["taller","more tall","tallest","the taller"],0,"Kısa sıfatlara -er eklenir."],
+["İngilizce","Comparatives","Istanbul is the ___ city in Turkey.",["biggest","bigger","big","most big"],0,"Üstünlük derecesinde -est kullanılır: the biggest."],
+["İngilizce","Modals","You ___ speak English well. (ability)",["can","cans","canned","can to"],0,"Yetenek için can kullanılır."],
+["İngilizce","Modals","You ___ eat more vegetables.",["should","shoulds","must to","can to"],0,"Öneri için should kullanılır."],
+["İngilizce","Modals","___ I help you?",["Can","Cans","Do","Am"],0,"Modal fiil soruda başa gelir: Can I help you?"],
+["İngilizce","Prepositions of time","I wake up ___ 7 o'clock.",["at","in","on","to"],0,"Saatlerde at kullanılır."],
+["İngilizce","Prepositions of time","We go to the cinema ___ Saturday.",["on","in","at","to"],0,"Günlerle on kullanılır."],
+["İngilizce","Prepositions of time","My birthday is ___ July.",["in","on","at","to"],0,"Aylarla in kullanılır."],
+["İngilizce","Personality and friendship","Someone who is always ready to help others is ___.",["kind","lazy","rude","noisy"],0,"Kind: nazik, yardımsever."],
+["İngilizce","Personality and friendship","What is the opposite of “honest”?",["dishonest","kind","brave","tall"],0,"Honest'in zıt anlamlısı dishonest'tir."],
+["İngilizce","Personality and friendship","Which word describes a person who is not afraid?",["brave","shy","lazy","sad"],0,"Brave: cesur."],
+["İngilizce","Transport and travel","Which one is a means of transport that goes on water?",["ship","bus","train","bicycle"],0,"Ship, suda giden taşıttır."],
+["İngilizce","Transport and travel","Where do you wait for a plane?",["airport","station","harbour","bus stop"],0,"Uçağı havalimanında beklersin."],
+["İngilizce","Transport and travel","Where can you buy a train ticket?",["At the station","At the library","At the bakery","At the hospital"],0,"Tren biletleri istasyondan alınır."]
+];
+const DQN=DQ.map(q=>[q[0],"",q[2],q[3],q[4],q[5],q[1]]);
+
+const L="ABCD";
+const $=s=>document.querySelector(s);
+const st={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuf=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+const bankOf=m=>m==="lgs"?Q:DQN;
+const solKey=m=>m==="lgs"?"sol":"dsol";
+const idsOf=(m,d,k)=>bankOf(m).map((q,i)=>(q[0]===d&&(k===undefined||q[6]===k))?i:-1).filter(i=>i>=0);
+const konular=(m,d)=>[...new Set(bankOf(m).filter(q=>q[0]===d).map(q=>q[6]))];
+
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const dayKey=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function track(){const days=st.get("days",{});const t=today();days[t]=(days[t]||0)+1;st.set("days",days)}
+function streak(){
+  const days=st.get("days",{}), d=new Date();
+  if(!days[dayKey(d)])d.setDate(d.getDate()-1);
+  let n=0; while(days[dayKey(d)]){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function feedback(ok){
+  if(st.get("sound",1)){
+    try{
+      const c=new (window.AudioContext||window.webkitAudioContext)();
+      const o=c.createOscillator(), g=c.createGain();
+      o.frequency.value=ok?880:220; g.gain.value=.05;
+      o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+.15);
+    }catch(e){}
+  }
+  if(navigator.vibrate)navigator.vibrate(ok?20:[60,40,60]);
+}
+const KONU_OZET={
+"Sözcük türleri":["İsim: varlık ve kavramların adı.","Sıfat: isimleri niteler (kırmızı elma).","Zamir: isimlerin yerini tutar (o, biz).","Zarf: fiili, sıfatı ya da zarfı niteler (çok, hızlıca)."],
+"Cümle bilgisi":["Özne: işi yapan kişi ya da varlık.","Yüklem: cümlenin işini ya da durumunu bildirir.","Olumsuz cümlede -me / -ma ekleri kullanılır.","Ünlem cümlesi duygu, soru cümlesi soru bildirir."],
+"Yazım kuralları":["Ay ve gün adları küçük harfle yazılır.","Bağlaç olan “de/da” ayrı, ek olan bitişik yazılır.","Sert ünsüz kuralı: kitap, kitabı.","“Herkes”, “hiçbir” gibi sözcüklerin doğru yazımına dikkat et."],
+"Tam sayılar":["Negatif sayılar sıfırın solunda yer alır.","Aynı işaretli iki sayı toplanır, işaret korunur.","Farklı işaretli sayılarda mutlak değerler farkı alınır, büyük olanın işareti verilir.","İki negatifin çarpımı pozitif, farklı işaretlilerin çarpımı negatiftir."],
+"Denklemler":["Eşitliğin iki tarafına aynı işlem uygulanır.","Terim karşıya geçince işareti değişir.","Bilinmeyen, katsayısına bölünerek bulunur.","Bulduğun x değerini denklemde yerine koyarak kontrol et."],
+"Üçgenler":["İç açılar toplamı 180°'dir.","Eşkenar üçgende her açı 60°'dir.","Dik üçgende a² + b² = c² (Pisagor).","Üçgenin alanı taban · yükseklik / 2'dir."],
+"Kuvvet ve hareket":["Ağırlık G = m · g, g yaklaşık 10 m/s².","Net kuvvet sıfırsa cisim durur ya da sabit hızla gider.","Sürtünme hareketin tersi yönünde etki eder.","Hız = yol / zaman."],
+"Madde ve ısı":["Erime, donma, buharlaşma ve yoğunlaşma hâl değişimleridir.","Hâl değişimi sırasında sıcaklık sabit kalır.","Buharlaşma sıcaklık ve yüzey alanı arttıkça hızlanır.","Yoğunluk = kütle / hacim."],
+"Canlılar ve hücre":["Hücre, canlıların temel yapı birimidir.","Mitokondri hücresel solunumla enerji üretir.","Bitki hücresinde hücre duvarı bulunur, hayvan hücresinde bulunmaz.","Amip ve bakteri tek hücreli canlılardır."],
+"Osmanlı'dan Cumhuriyete":["Saltanat 1 Kasım 1922'de kaldırıldı.","TBMM 23 Nisan 1920'de açıldı.","Cumhuriyet 29 Ekim 1923'te ilan edildi.","Halifelik 3 Mart 1924'te kaldırıldı."],
+"Milli Mücadele":["19 Mayıs 1919: Mustafa Kemal'in Samsun'a çıkışı.","Erzurum ve Sivas Kongreleri ulusal birliği sağladı.","Sakarya ve Büyük Taarruz ile Yunan ilerleyişi durduruldu.","Mudanya ateşkesi ve Lozan antlaşması ile bağımsızlık tanındı."],
+"Atatürk ilkeleri ve inkılaplar":["Altı ilke: cumhuriyetçilik, milliyetçilik, halkçılık, devletçilik, laiklik, inkılapçılık.","Laiklik: din ve devlet işlerinin ayrılması.","Harf inkılabı 1928, kadınlara milletvekili seçme ve seçilme hakkı 1934.","Milli egemenlik: egemenlik millete aittir."],
+"İbadet":["Beş şart: kelime-i şehadet, namaz, oruç, zekât, hac.","Namaz günde beş vakit kılınır.","Oruç Ramazan ayında tutulur.","Hac, gücü yeten müslümanlara farzdır."],
+"İman esasları":["Allah'a, meleklere, kitaplara, peygamberlere, ahirete ve kadere iman.","Kader: her şeyin Allah'ın bilgi ve takdiriyle olduğuna inanmak.","Ahiret inancı sorumluluk bilinci kazandırır.","Peygamberler insanları doğru yola çağırır."],
+"Ahlak":["Doğruluk, dürüstlük, adalet ve yardımseverlik temel değerlerdir.","Alçakgönüllülük: kendini başkalarından üstün görmemek.","Sorumluluk: yaptığın işin sonucunu kabul etmek.","Merhamet ve şefkat kardeşlik ilişkisinin temelidir."],
+"Present simple":["Alışkanlık ve genel doğrular için kullanılır.","Üçüncü tekil şahısta fiile -s / -es eklenir.","Soruda do / does kullanılır.","Olumsuzda don't / doesn't kullanılır."],
+"Past simple":["Geçmişte bitmiş eylemler için kullanılır.","Düzenli fiillere -ed eklenir, düzensizler ezberlenir.","Soruda did + fiilin yalın hâli kullanılır.","yesterday, last year gibi zaman ifadeleri sık görülür."],
+"Daily life":["Günlük yaşam sözcükleri: bakery, library, pen...","Zıt anlamlılar: hot - cold, dry - wet.","Meyve ve sebze ayrımı.","“Where do you buy...?” gibi soru kalıplarını tanı."]
+};
+const KONU_ANLATIM={
+"Sözcük türleri":["Sözcükler cümle içindeki görevlerine ve anlamlarına göre sınıflandırılır. Bu sınıflandırma, cümleyi doğru çözümlemek ve soruları doğru yorumlamak için temeldir.","İsimler varlık ve kavramları adlandırır: kitap, Ankara, sevgi. Sıfatlar isimleri niteler ve genellikle isimden önce gelir: güzel çiçek, büyük ev. Zamirler isimlerin yerini tutar: ben, sen, o, biz. Zarflar fiilleri, sıfatları ya da başka zarfları niteler; nasıl, ne zaman, ne kadar sorularına cevap verir: hızlı koştu, çok güzel.","Bir sözcüğün türünü anlamak için cümledeki işine bakılır. Güzel sözcüğü güzel bir gün cümlesinde sıfat, güzel konuştu cümlesinde zarf gibi davranabilir. Bu yüzden sözcüğü tek başına değil, cümle içinde değerlendir."],
+"Cümle bilgisi":["Cümlenin temel öğeleri özne ve yüklemdir. Özne işi yapan ya da durumu taşıyan kişi veya varlıktır; yüklem ise işi ya da durumu bildirir.","Cümleler olumlu ya da olumsuz olabilir. Olumsuz cümle, fiile -me ya da -ma eki getirilerek kurulur: geldim, gelmedim.","Cümle türleri bildirdikleri anlama göre ayrılır. Bildirme cümlesi bir durumu anlatır, soru cümlesi soru sorar, ünlem cümlesi duyguyu anlatır, emir cümlesi bir işin yapılmasını ister. Soru türünü belirlemek için cümlenin sonuna ve mi soru ekine bakılır."],
+"Yazım kuralları":["Yazım kuralları sözcüklerin ve eklerin doğru yazılmasını sağlar. En sık hata yapılan konular ayrı-bitişik yazım, büyük harf kullanımı ve sert ünsüz kuralıdır.","De ve da bağlaç ise ayrı yazılır: Sen de geldin. Ek ise bitişik yazılır: Evde kaldım. Ki de benzer şekilde bağlaç ya da ek olabilir; bağlaç olan ki ayrı, ek olan ki bitişik yazılır.","Ay ve gün adları küçük harfle yazılır: ağustos, pazartesi. Sözcük sonundaki p, ç, t, k sesleri ünlüyle başlayan ek aldığında sertleşebilir: kitap, kitabı. Büyük harf cümle başında, özel adlarda ve kısaltmalarda kullanılır."],
+"Tam sayılar":["Tam sayılar sıfırın iki yanında uzanan sayılardır: ..., −2, −1, 0, 1, 2, ... Sayı doğrusunda sağa gidildikçe sayılar büyür, sola gidildikçe küçülür.","Toplamada aynı işaretli sayıların mutlak değerleri toplanır ve işaret korunur: (−4) + (−3) = −7. Farklı işaretli sayılarda mutlak değerlerin farkı alınır, sonuç mutlak değeri büyük olan sayının işaretini alır: (−8) + 5 = −3.","Çarpma ve bölmede aynı işaretliler pozitif, farklı işaretliler negatif sonuç verir: (−6) · (−2) = 12, (−20) ÷ 4 = −5."],
+"Denklemler":["Denklem, eşitliğin iki tarafının eşit olduğu ve bilinmeyen bir değer içeren ifadedir. Amaç, bilinmeyeni yalnız bırakmaktır.","Eşitliğin her iki tarafına aynı sayı eklenebilir, çıkarılabilir, çarpılabilir ya da sıfırdan farklı bir sayıya bölünebilir. Bir terim karşıya geçtiğinde işareti değişir: x + 5 = 12 ise x = 12 − 5 = 7.","Katsayı varsa işlem tersine çevrilerek bulunur: 3x = 18 ise x = 6. Bulunan değeri denklemde yerine koyarak kontrol etmek hataları azaltır."],
+"Üçgenler":["Üçgen, üç kenarı ve üç köşesi olan kapalı bir şekildir. Kenar uzunluklarına ve açılarına göre farklı türleri vardır.","İç açılar toplamı her zaman 180 derecedir. Eşkenar üçgende üç kenar ve üç açı eşittir, her açı 60 derecedir. İkizkenar üçgende iki kenar ve bunların karşısındaki iki açı eşittir.","Dik üçgende bir açı 90 derecedir ve dik kenarlarla hipotenüs arasında a² + b² = c² bağıntısı vardır (Pisagor). Üçgenin alanı taban ile yüksekliğin çarpımının yarısıdır."],
+"Kuvvet ve hareket":["Kuvvet, bir cismi hareket ettirebilen, durduran ya da şeklini değiştirebilen etkidir. Kuvvetin birimi newton (N)'dur.","Ağırlık, yerçekiminin cisme uyguladığı kuvvettir: G = m · g. Dünya'da g yaklaşık 10 m/s² kabul edilir. Aynı yönlü kuvvetler toplanır, zıt yönlü olanlar çıkarılır.","Newton'un birinci yasasına göre net kuvvet sıfırsa cisim ya durur ya da sabit hızla doğrusal hareket eder. Sürtünme kuvveti harekete karşı etki eder. Hız, alınan yolun geçen süreye bölümüdür: v = x / t."],
+"Madde ve ısı":["Maddeler katı, sıvı ve gaz hâlinde bulunur. Isı alındığında ya da verildiğinde madde hâl değiştirebilir.","Erime katıdan sıvıya, donma sıvıdan katıya geçiştir. Buharlaşma sıvıdan gaza, yoğuşma gazdan sıvıya geçiştir. Hâl değişimi sırasında sıcaklık sabit kalır; verilen ısı taneciklerin bağlarını koparmak ya da kurmak için kullanılır.","Buharlaşma sıcaklık ve yüzey alanı arttıkça, rüzgâr esdikçe hızlanır. Yoğunluk, birim hacmin kütlesidir: d = m / V. Bir cisim yoğunluğu içinde bulunduğu sıvıdan küçükse yüzer, büyükse batar."],
+"Canlılar ve hücre":["Canlıların temel yapı birimi hücredir. Bazı canlılar tek hücreden, bazıları milyarlarca hücreden oluşur. Hücreler organel adı verilen küçük yapılarla işlevlerini yerine getirir.","Hücre zarı maddelerin giriş çıkışını düzenler. Çekirdek kalıtsal bilgiyi taşır. Mitokondri hücresel solunumla enerji üretir. Bitki hücresinde buna ek olarak hücre duvarı ve fotosentez yapan kloroplastlar bulunur.","Benzer hücreler bir araya gelerek dokuları, dokular organları, organlar sistemleri oluşturur. Amip ve bakteri gibi canlılar tek hücrelidir ve bütün yaşamsal işlevlerini tek hücreyle sürdürür."],
+"Osmanlı'dan Cumhuriyete":["19. yüzyıldan itibaren Osmanlı Devleti gerileme dönemine girdi ve yenilik çabaları hızlandı. 20. yüzyılın başındaki savaşlar ve işgal yeni bir yönetim anlayışının doğmasına yol açtı.","Milli Mücadele, Mondros ve Sevr sonrasında işgale karşı başlatılan ulusal bir hareketti. 23 Nisan 1920'de TBMM açıldı ve egemenliğin millete ait olduğu ilan edildi.","1 Kasım 1922'de saltanat kaldırıldı, 29 Ekim 1923'te Cumhuriyet ilan edildi. 3 Mart 1924'te halifelik kaldırılarak eğitim birliği sağlandı ve laiklik yönünde adımlar atıldı."],
+"Milli Mücadele":["Milli Mücadele, Osmanlı'nın işgal altında kalması ve Sevr Antlaşması'nın ağır koşulları üzerine başladı. Mustafa Kemal'in 19 Mayıs 1919'da Samsun'a çıkışı mücadelenin başlangıcı kabul edilir.","Amasya Genelgesi, Erzurum ve Sivas Kongreleri ulusal birliği ve ortak kararı sağladı. Ankara'da TBMM hükümeti kuruldu ve düzenli ordu güçlendirildi.","Sakarya Savaşı (1921) Yunan ilerleyişini durdurdu. Büyük Taarruz (1922) ile Batı Anadolu kurtarıldı. Mudanya Ateşkesi ve Lozan Antlaşması (1923) ile bağımsızlık uluslararası alanda kabul edildi."],
+"Atatürk ilkeleri ve inkılaplar":["Atatürk ilkeleri Cumhuriyet'in temel felsefesidir: cumhuriyetçilik, milliyetçilik, halkçılık, devletçilik, laiklik ve inkılapçılık.","Laiklik din ve devlet işlerinin ayrılmasıdır. Milli egemenlik, egemenliğin millete ait olduğu anlayışıdır. Halkçılık toplumda sınıf ayrımı olmadan eşitliği savunur.","Önemli inkılaplar arasında Tevhid-i Tedrisat (1924), Medeni Kanun (1926), Harf İnkılabı (1928), kadınlara seçme ve seçilme hakkı (1934) ve Soyadı Kanunu (1934) bulunur."],
+"İbadet":["İbadet, Allah'a yakınlaşmak için yapılan davranışlardır. İslam'ın beş şartı kelime-i şehadet, namaz, oruç, zekât ve haccı kapsar.","Namaz günde beş vakittir ve insanı düzenli, huzurlu ve sorumlu kılar. Oruç Ramazan ayında imsaktan iftara kadar yeme, içme ve cinsel ilişkiden uzak durmaktır.","Zekât, belirli bir servete ulaşan müslümanın mal varlığının belirli bir oranını ihtiyaç sahiplerine vermesidir. Hac, gücü yeten müslümanın belirli zaman ve mekânda yerine getirdiği farz bir ibadettir."],
+"İman esasları":["İman, kalple tasdik ve dille ikrardır. İslam inancında altı iman esası vardır: Allah'a, meleklere, kitaplara, peygamberlere, ahirete ve kadere iman.","Melekler Allah'ın emirlerini yerine getiren varlıklardır. Kitaplar Allah'ın peygamberlere gönderdiği vahiylerdir; Kur'an-ı Kerim son kitaptır. Peygamberler insanları doğru yola çağırmakla görevlidir.","Ahiret inancı, dünyada yapılan iyi ve kötü davranışların karşılığının görüleceğine inanmaktır. Kader ise her şeyin Allah'ın bilgi ve takdiriyle olduğuna inanmak, insanın da sorumlu olduğunu kabul etmektir."],
+"Ahlak":["Ahlak, insanın davranışlarını yönlendiren iyi ve kötü değerler bütünüdür. Doğruluk, adalet, merhamet, sorumluluk ve yardımseverlik temel değerler olarak ele alınır.","Doğruluk söz ve davranışta samimi olmaktır. Adalet herkese hakkını vermektir. Alçakgönüllülük kendini başkalarından üstün görmemektir.","Değerler yalnızca bilgiyle değil uygulamayla yaşanır. Başkasının sıkıntısını paylaşmak, verilen sözü tutmak ve sorumluluğu üstlenmek bu değerlerin günlük hayattaki karşılığıdır."],
+"Çarpanlar ve katlar":["Bir sayıyı tam bölen sayılara çarpan, bir sayının tam katları olan sayılara kat denir. Asal çarpanlara ayırma, sayıların ortak özelliklerini bulmanın yoludur.","EBOB ortak çarpanların en büyüğü, EKOK ortak katların en küçüğüdür. 12 = 2²·3 ve 18 = 2·3² için EBOB 6, EKOK 36'dır."],
+"Üslü ifadeler":["a üssü n, a tabanının n kez çarpımıdır. Tabanlar aynıysa çarpımda üsler toplanır, bölümde çıkarılır: a^m · a^n = a^(m+n), a^m / a^n = a^(m−n).","Üssün üssü alındığında üsler çarpılır: (a^m)^n = a^(m·n). Sıfırdan farklı her sayının sıfırıncı kuvveti 1'dir."],
+"Kareköklü ifadeler":["√a, karesi a olan negatif olmayan sayıdır. √49 = 7'dir. Kök içindeki sayı tam kare çarpanına ayrılarak sadeleştirilir: √50 = √(25 · 2) = 5√2.","Kareköklü ifadeler toplanırken aynı kökler birleşir: 3√2 + 2√2 = 5√2. Farklı kökler birleştirilemez."],
+"Veri analizi":["Aritmetik ortalama, verilerin toplamının veri sayısına bölümüdür. Medyan sıralanmış verinin ortasındaki değerdir; veri sayısı çiftse ortadaki iki değerin ortalaması alınır.","Mod en çok tekrar eden değerdir. Açıklık en büyük ile en küçük değerin farkıdır. Bu ölçüler birlikte kullanıldığında verinin genel durumu daha iyi anlaşılır."],
+"Olasılık":["Bir olayın olasılığı, istenen durum sayısının tüm durum sayısına oranıdır: P(A) = istenen / tümü. Olasılık 0 ile 1 arasında değer alır.","0 olasılık imkânsız olayı, 1 kesin olayı gösterir. Zar, para ve torba soruları bu formülle çözülür."],
+"Cebirsel ifadeler":["Harf içeren ifadelere cebirsel ifade denir. Benzer terimlerin yalnızca katsayıları toplanır: 2x + 3x = 5x.","Özdeşlikler her değer için doğru eşitliklerdir: (a + b)² = a² + 2ab + b², (a − b)² = a² − 2ab + b², (a + b)(a − b) = a² − b²."],
+"Eşitsizlik":["Eşitsizlikler iki ifadenin büyük, küçük ya da eşit olmadığını gösterir: <, >, ≤, ≥. Denklem gibi çözülür; bir terim karşıya geçince işareti değişir.","Eşitsizliğin iki tarafı negatif bir sayıyla çarpılır ya da bölünürse yön değişir: −2x > 6 ise x < −3."],
+"Eşlik ve benzerlik":["Eş şekiller aynı büyüklük ve biçimde olan şekillerdir; karşılık gelen kenar ve açıları eşittir. Benzer şekillerin biçimleri aynı, boyutları farklıdır.","Benzer üçgenlerde karşılık gelen açılar eşit, karşılık gelen kenarlar orantılıdır. Bu oran benzerlik oranıdır."],
+"Pisagor":["Dik üçgende en uzun kenar hipotenüstür. Dik kenarların karelerinin toplamı hipotenüsün karesine eşittir: a² + b² = c².","Bağıntı yalnızca dik üçgende geçerlidir. 3-4-5 ve 6-8-10 gibi üçlüler işlemi kolaylaştırır."],
+"Dönüşüm geometrisi":["Öteleme şekli belirli bir yönde ve uzaklıkta kaydırır. Yansıma şeklin bir doğruya göre simetriğini alır. Dönme şekli bir nokta etrafında belirli bir açı kadar döndürür.","Dönüşümlerde şeklin boyutu ve biçimi korunur; yalnızca yeri ya da yönü değişir. Yansımada şekil ters yönlüdür."],
+"Geometrik cisimler":["Küp altı eş kareden, dikdörtgenler prizması altı dikdörtgenden oluşur. Silindir, koni ve küre de yüzleri ve hacimleriyle ayırt edilir.","Prizmanın ve silindirin hacmi taban alanı ile yüksekliğin çarpımıdır. Küpün hacmi a³'tür. Silindirin taban alanı π · r²'dir."],
+"Yüzde ve oran-orantı":["Yüzde bir miktarın 100 üzerinden değeridir. %20 artış değeri 1,20 ile çarpmak demektir. Oran iki büyüklüğün bölümüdür; orantı iki oranın eşitliğidir.","Doğru orantıda bir büyüklük artarken diğeri aynı oranda artar: 3 kalem 12 TL ise 7 kalem 28 TL eder. Ters orantıda biri artarken diğeri azalır."],
+"Noktalama işaretleri":["Nokta cümlenin sonunda ve kısaltmalardan sonra kullanılır: Dr., Prof., Av. Virgül sıralanan öğeler arasında ve cümle içindeki kısa duraklamalarda konur.","Soru işareti soru cümlesinin sonuna, ünlem işareti duygu bildiren cümlelerin sonuna gelir. Üç nokta düşünceyi yarıda bırakmak için kullanılır."],
+"Fiilimsiler":["Fiilden türeyen ama cümlede fiil görevi yapmayan sözcüklere fiilimsi denir. Üç türü vardır: isim-fiil, sıfat-fiil ve zarf-fiil.","İsim-fiil -mek, -ma ekiyle isim gibi davranır (gelmek için). Sıfat-fiil isimleri niteler (okuyan çocuk). Zarf-fiil fiilin nasıl yapıldığını gösterir (koşarak gitti)."],
+"Sözcükte anlam":["Sözcükler gerçek ve mecaz anlamda kullanılabilir. Gerçek anlam sözcüğün temel anlamıdır; mecaz anlam bağlama göre kazanılan yeni anlamdır.","Eş anlamlı sözcükler aynı ya da çok yakın anlamdadır; zıt anlamlılar birbirinin karşıtıdır. Hangi anlamda kullanıldığı cümlenin bütününden anlaşılır."],
+"Söz sanatları":["Söz sanatları anlatımı güçlendirir. Benzetme iki varlık arasında benzerlik kurar (kadar, gibi ile). Kişileştirme cansız varlıklara insan özelliği verir.","Abartma bir durumu olduğundan büyük ya da küçük göstermektir. Tezat zıt kavramları yan yana getirmektir. Yineleme aynı sözcük ya da söz öbeğinin tekrarıdır."],
+"Anlatım biçimleri":["Anlatım biçimleri öyküleme, betimleme, tartışma ve açıklama olarak ayrılır. Öyküleme olay ve zaman sırasını; betimleme bir varlığın özelliklerini anlatır.","Tartışma bir düşünceyi kanıtlarla savunur; açıklama bir kavramı ya da durumu bilgi vererek anlatır. Bir metinde birden fazla anlatım biçimi birlikte bulunabilir."],
+"Paragraf":["Paragraf, belli bir konuyu işleyen birkaç cümleden oluşan bölümdür. Konu, paragrafta üzerinde durulan genel varlık ya da olaydır.","Ana düşünce paragrafın tamamını kapsayan ve yazarın asıl vurguladığı düşüncedir. Yardımcı düşünceler ana düşünceyi destekler ve açıklar."],
+"Atasözleri ve deyimler":["Atasözleri toplumun deneyimlerini özetleyen, öğüt veren kalıplaşmış sözlerdir. Deyimler gerçek anlamından farklı, mecaz anlam taşıyan kalıplaşmış söz öbekleridir.","Deyimler cümle içinde yeni anlamla kullanılır: kulak vermek dinlemek, göz doldurmak beğendirmek anlamına gelir. Atasözü tam bir cümledir; deyim ise cümlenin parçasıdır."],
+"Anlatım bozukluğu":["Anlatım bozukluğu, anlamın yanlış ya da belirsiz olmasına yol açan kullanımlardır. Aynı anlamı taşıyan sözcüklerin gereksiz yere yan yana gelmesi en sık görülen türdür.","Özne ile yüklemin uyumsuzluğu, yanlış sözcük seçimi ve mantık hatası da anlatım bozukluğudur. Gereksiz tekrar yerine tek bir sözcük tercih edilmelidir."],
+"Elektrik":["Elektrik akımı, yüklü parçacıkların hareketidir ve birimi amperdir. Gerilim (volt) akımı harekete geçiren etkidir; direnç (ohm) akıma karşı koyar.","Pilleri seri bağlarsak gerilimler toplanır. Metaller elektriği iyi iletir (iletken), plastik ve cam ise iletmez (yalıtkan)."],
+"Işık":["Işık doğrusal yayılır. Düz bir yüzeye çarpıp geri dönmesine yansıma, ortam değiştirirken yön değiştirmesine kırılma denir.","Engelin arkasında oluşan karanlık bölge gölgedir. Gölge, ışığın doğrusal yayılmasının sonucudur."],
+"Basınç":["Basınç, birim alana düşen kuvvettir: P = F / A. Aynı kuvvet daha küçük bir alana uygulanırsa basınç artar.","Sıvıların basıncı derinlikle artar. Kar ayakkabısı geniş alan sağlayarak basıncı azaltır."],
+"Dünya ve Evren":["Dünya kendi ekseni etrafında yaklaşık 24 saatte bir kez döner; bu hareket gece ve gündüzü oluşturur. Güneş etrafında yaklaşık bir yılda bir tur atar.","Mevsimler, Dünya'nın eksen eğikliği nedeniyle Güneş ışınlarının düşme açısının değişmesinden oluşur. Ay'ın evreleri ise Ay'ın Dünya çevresindeki konumuna bağlıdır."],
+"Kalıtım ve üreme":["Kalıtsal özellikler genlerle taşınır. Genler kromozomlar üzerinde yer alır ve anne babadan çocuğa aktarılır.","Eşeyli üremede iki farklı üreme hücresi birleşir. Eşeysiz üremede ise tek ebeveyn, tomurcuklanma ya da bölünme ile yeni birey oluşturur."],
+"Ekosistem ve enerji":["Ekosistemdeki canlılar üretici, tüketici ve ayrıştırıcı olarak sınıflandırılır. Üreticiler güneş enerjisiyle besin üretir.","Enerji üreticiden tüketiciye doğru tek yönlü akar ve her basamakta bir kısmı ısı olarak kaybolur. Ayrıştırıcılar ölü maddeleri parçalayarak madde döngüsünü sürdürür."],
+"Asitler ve bazlar":["Asitler ekşi tatlı, pH değeri 7'nin altında olan maddelerdir. Bazlar kaygan hissettirir ve pH değeri 7'nin üstündedir. PH 7 nötrdür.","Asit ile baz karıştığında nötrleşme tepkimesi gerçekleşir. Limon suyu ve sirke asidik, çamaşır suyu bazik özellik gösterir."],
+"Ses":["Ses, maddesel bir ortamda yayılan mekanik bir dalgadır; boşlukta yayılamaz. Sesin kaynağı titreşir ve bu titreşim ortam aracılığıyla kulağa ulaşır.","Sesin şiddeti genliğe, tizliği frekansa bağlıdır. Frekans bir saniyedeki titreşim sayısıdır."],
+"Mondros ve Sevr dönemi":["1918'de imzalanan Mondros Mütarekesi ile İstanbul ve birçok önemli bölge işgale uğradı. Osmanlı'nın askerî gücü bu süreçte büyük ölçüde azaltıldı.","Sevr Antlaşması, Osmanlı topraklarının büyük bölümünün paylaşılmasını öngörüyordu. Bu antlaşma Türk milletinin bağımsızlık mücadelesini başlatan temel nedenlerden biri oldu."],
+"Dış politika":["Atatürk dönemi dış politikası “Yurtta sulh, cihanda sulh” ilkesine dayanıyordu. Barışçıl ilişkiler ve komşularla iyi geçinme amaçlanıyordu.","Türkiye 1932'de Milletler Cemiyeti'ne üye oldu. Balkan Antantı (1934) ve Sadabat Paktı (1937) bölgesel barışı güçlendirmek için kuruldu."],
+"Milli eğitim inkılapları":["Tevhid-i Tedrisat (1924) ile eğitim tek elde toplandı. Böylece laik ve birlikte bir eğitim sistemi kuruldu.","Köy Enstitüleri kırsal kesimde eğitimi yaygınlaştırmak için kuruldu. Halkevleri ise halkın kültürel ve sosyal gelişimine katkı amacıyla açıldı."],
+"Hukuk inkılapları":["Medeni Kanun (1926) aile ve miras hukukunda eşitlik yönünde önemli değişiklikler getirdi. Çok eşlilik kaldırıldı.","Türk Ceza Kanunu (1926) ile çağdaş bir ceza hukuku sistemi benimsendi. Hukuk alanındaki bu inkılaplar laik devlet anlayışının temelini oluşturdu."],
+"Ekonomi politikaları":["1930'larda Türkiye devletçilik ilkesini benimsedi. Devlet ekonomide yatırım yaparak sanayileşmeyi hedefledi.","Birinci Beş Yıllık Sanayi Planı (1934) ile sanayi tesisleri kuruldu. İzmir İktisat Kongresi (1923) ise ekonomi politikalarının temel ilkelerini tartışmak için toplandı."],
+"Cumhuriyet'in ilk yılları":["Cumhuriyet'in ilanından sonra başkent Ankara oldu. Yeni devlet kurumlarının kurulması ve yönetimin düzenlenmesi bu dönemin önemli başlıklarıdır.","Tek parti döneminde iktidarda Cumhuriyet Halk Partisi bulundu. Şeyh Sait İsyanı (1925) gibi iç isyanlar bu dönemde bastırıldı."],
+"Atatürk dönemi kültür ve sanat":["Türk Tarih Kurumu (1931) ve Türk Dil Kurumu (1932) milli kültürü ve dili araştırmak için kuruldu. Türkçe'nin öz Türkçe kökleriyle zenginleşmesi hedeflendi.","Ankara Devlet Konservatuvarı (1936) müzik ve sanat eğitimi için açıldı. Bu dönemde sanat ve kültür kurumları çağdaş bir çizgide gelişti."],
+"Hz. Muhammed'in hayatı":["Hz. Muhammed Mekke'de doğdu. Kırk yaşında ilk vahyi Hira Mağarası'nda aldı ve peygamberlik görevine başladı.","Hicret, Müslümanların baskı nedeniyle Mekke'den Medine'ye göçüdür. Hicret, İslam takviminin başlangıcı kabul edilir."],
+"Kur'an-ı Kerim":["Kur'an-ı Kerim, Allah'ın Hz. Muhammed'e Arapça olarak vahyettiği kutsal kitaptır. 114 sureden oluşur.","İlk inen sure Alak suresidir. Kur'an insanlara doğru yolu gösteren ve hayatı düzenleyen temel kaynaktır."],
+"Peygamberler":["Peygamberler insanları Allah'ın birliğine ve doğru yola çağırmakla görevlidir. Hz. Muhammed son peygamberdir.","Hz. İbrahim tevhid inancı ve sadakatiyle tanınır. Peygamberlerin ortak mesajı, yalnız Allah'a kulluk etmektir."],
+"Hac ve kurban":["Hac, Zilhicce ayında Mekke'de yapılan ve gücü yeten müslümanlara farz olan bir ibadettir.","Kurban, Allah rızası için fedakârlık ve paylaşmanın simgesidir. Kurban Bayramı Zilhicce'nin 10. gününden itibaren kutlanır."],
+"Dinî kavramlar":["Tevekkül, çabayı gösterip sonucu Allah'a bırakmaktır. Hayır iyiliği, şer kötülüğü anlatır.","Takva, Allah'tan sakınarak kötülüklerden uzak durmaktır. Bu kavramlar ahlaki davranışların temelini oluşturur."],
+"Din ve hayat":["Din inanç, ibadet ve ahlak yoluyla bireyin davranışlarını ve değerlerini yönlendirir.","Dinî bilgilerin doğru yorumlanması yanlış anlamaları önler. Hoşgörü toplumsal barışı ve birliği güçlendirir."],
+"Future":["Will, anlık kararlar ve gelecek tahminleri için kullanılır: I'll help you. Be going to önceden verilmiş kararlar ve kanıta dayalı tahminler için kullanılır: It is going to rain.","Olumsuzda will not (won't) ya da be not going to kullanılır. Soruda Will ya da Are/Is cümlenin başına gelir."],
+"Present continuous":["Present continuous şu anda devam eden eylemler için kullanılır. Yapısı am/is/are + fiil-ing şeklindedir: She is reading now.","Olumsuz cümlede not eklenir, soruda be fiili başa geçer: Are they playing? Now, at the moment, look! zaman ifadeleri sık görülür."],
+"Comparatives":["Kısa sıfatlara -er eklenerek karşılaştırma yapılır: taller, bigger. Uzun sıfatların önüne more gelir: more interesting.","Üstünlük derecesinde kısa sıfatlara -est, uzun sıfatlara most eklenir: the tallest, the most interesting."],
+"Modals":["Modal fiiller (can, must, should) fiilden önce gelir ve kişiye göre değişmez. Yetenek için can, öneri için should kullanılır.","Olumsuzda can't, mustn't, shouldn't kullanılır. Soru cümlesinde modal fiil başa gelir: Can you swim?"],
+"Prepositions of time":["Saatle at, günlerle on, ay ve yıl ile in kullanılır: at 7 o'clock, on Monday, in July, in 2026.","Sık kullanılan zaman ifadelerini kalıp olarak ezberlemek bu konuda en hızlı çözümdür."],
+"Personality and friendship":["Kişilik sıfatları karakteri anlatır: kind (nazik), honest (dürüst), brave (cesur), lazy (tembel), shy (utangaç).","Zıt anlamlı çiftler öğrenmeyi kolaylaştırır: honest - dishonest, kind - unkind."],
+"Transport and travel":["Ulaşım kelimeleri: bus, train, ship, plane, bicycle. Yer kelimeleri: airport, station, harbour, bus stop.","Bilet alma ve binme ile ilgili ifadeler günlük yaşamda işe yarar: buy a ticket, wait for the bus, get on the train."],
+"Present simple":["Present simple alışkanlıkları, genel doğruları ve rutin işleri anlatmak için kullanılır: I study every day. Water boils at 100 degrees.","Olumlu cümlede I, you, we, they öznelerinde fiil yalın hâlde kalır. He, she, it gibi üçüncü tekil şahıslarda fiile -s ya da -es eklenir: She goes to school.","Olumsuz cümlede do not ya da does not (don't, doesn't) kullanılır: They don't play. Soru cümlesinde Do ya da Does cümlenin başına gelir: Does he like tea?"],
+"Past simple":["Past simple geçmişte başlayıp biten eylemleri anlatır. Yesterday, last week, in 2010 gibi zaman ifadeleriyle sık kullanılır.","Düzenli fiillere -ed eklenir: play, played; visit, visited. Düzensiz fiiller ayrı öğrenilir: go, went; be, was ya da were; read geçmişte farklı okunur.","Olumsuzda did not (didn't) ve fiilin yalın hâli kullanılır: She didn't come. Soruda Did cümlenin başına gelir ve fiil yalın hâlde kalır: Did you call me?"],
+"Daily life":["Günlük hayat kelimeleri ev, okul, alışveriş, yemek ve şehir gibi alanlardaki sözcükleri kapsar. Kelimeleri konulara göre gruplamak öğrenmeyi kolaylaştırır.","Mekânlar: bakery (fırın), library (kütüphane), hospital (hastane), airport (havalimanı). Eşyalar: pen (kalem), spoon (kaşık), window (pencere). Zıt anlamlılar hot-cold, dry-wet, dark-light gibi çiftlerle öğrenilebilir.","Soru kalıpları günlük yaşamda sık geçer: Where do you buy bread? What time do you wake up? Bu kalıpları kelimelerle birlikte çalışmak sınavda hızlı cevap vermeni sağlar."]
+};
+function noteBox(q){return `<textarea class="note" data-note="${esc(q[2])}" rows="2" placeholder="Kişisel not">${esc((st.get("notes",{})[q[2]])||"")}</textarea>`}
+function bindNotes(){
+  document.querySelectorAll("textarea.note").forEach(t=>t.onchange=()=>{
+    const n=st.get("notes",{}); n[t.dataset.note]=t.value; st.set("notes",n);
+  });
+}
+function exportWrong(d){
+  const w=st.get("dwrong",[]).filter(q=>!d||q[0]===d), notes=st.get("notes",{});
+  const txt=w.map((q,i)=>`${i+1}. [${q[0]} · ${q[6]}] ${q[2]}\n${q[3].map((o,j)=>L[j]+") "+o).join("\n")}\nDoğru cevap: ${L[q[4]]}\n${q[5]}${notes[q[2]]?"\nNot: "+notes[q[2]]:""}`).join("\n\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt||"Yanlış yok."],{type:"text/plain;charset=utf-8"}));
+  a.download="yanlislar.txt"; a.click();
+}
+
+const START={home:["home"],lgs:["subjects","lgs"],ders:["subjects","ders"],sim:["sim"],plan:["plan"]};
+const tabs=[["home","Ana sayfa"],["lgs","LGS Çalışma"],["ders","Ders Çalışma"],["sim","LGS Simülesi"],["plan","Planım"]];
+let timer=null, ex=null;
+const V={};
+
+$("#nav").innerHTML=tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join("");
+$("#nav").onclick=e=>{const b=e.target.closest("button");if(b){const t=b.dataset.t;go(t,...START[t])}};
+
+function go(tab,view,...a){
+  clearInterval(timer); ex=null; qz=null; $("#v").onclick=null;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===tab));
+  V[view](tab,...a);
+}
+
+const qhtml=(q,i,fb)=>`<div class="box" data-q="${i}">
+  <div class="tag">${esc(q[0])} · ${esc(q[6])}</div>
+  ${q[1]?`<div class="metin">${esc(q[1])}</div>`:""}
+  ${q[2]?`<div><b>${esc(q[2])}</b></div>`:""}
+  ${q[3].map((o,j)=>`<button class="opt" data-j="${j}">${L[j]}) ${esc(o)}</button>`).join("")}
+  ${fb?'<div class="exp hide"></div>':""}
+  ${fb?noteBox(q):""}
+</div>`;
+
+/* ---------- ana sayfa ---------- */
+V.home=()=>{
+  const last=st.get("last",null);
+  const cont=last?`<button class="item" data-cont="1" style="border-left-color:#ffd43b;margin-bottom:12px"><b>Devam et</b><div class="mut">${esc(last.k)} · ${esc(last.d)}</div></button>`:"";
+  const sol=st.get("sol",{}), dsol=st.get("dsol",{}), r=st.get("res",[]);
+  const avg=r.length?(r.reduce((a,x)=>a+x.net,0)/r.length).toFixed(1):"—";
+  $("#v").innerHTML=`
+  <div class="box row">
+    <div><div class="mut">Simülasyon ortalaman (net)</div><div class="big">${avg}</div></div>
+    <div class="mut" style="margin-left:auto;text-align:right">LGS: ${Object.keys(sol).length}/${Q.length} çözüldü<br>Ders: ${Object.keys(dsol).length}/${DQN.length} çözüldü</div>
+  </div>
+  ${cont}
+  <div class="grid">
+    <button class="item" data-go="lgs" style="border-left-color:#ff6b6b"><b>LGS Çalışma</b><div class="mut">Yeni nesil sorular, konu konu</div></button>
+    <button class="item" data-go="ders" style="border-left-color:#4dabf7"><b>Ders Çalışma</b><div class="mut">Konu çalışma, sınırsız quiz, yanlışlarım</div></button>
+    <button class="item" data-go="sim" style="border-left-color:#51cf66"><b>LGS Simülesi</b><div class="mut">${SIM_TOTAL} soru · ${SIM_MIN} dakika</div></button>
+  </div>
+  <p style="text-align:center;margin-top:16px"><button class="btn link" id="rs">İlerlemeyi sıfırla</button></p>`;
+  $("#v").onclick=e=>{
+    if(e.target.closest("[data-cont]")){go(last.tab,"konu",last.m,last.d,last.k);return}
+    const g=e.target.closest("[data-go]");
+    if(g){const m=g.dataset.go;go(m,...START[m]);return}
+    if(e.target.closest("#rs")&&confirm("Tüm ilerleme ve simülasyon sonuçları silinsin mi?")){
+      st.set("sol",{}); st.set("dsol",{}); st.set("res",[]); V.home();
+    }
+  };
+};
+
+/* ---------- ders seçimi (LGS ya da Ders) ---------- */
+V.subjects=(tab,m)=>{
+  const sol=st.get(solKey(m),{});
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← Ana sayfa</button>
+    <h2 style="margin:0;font-size:1.2em">${m==="lgs"?"LGS Çalışma":"Ders Çalışma"}</h2>
+  </div>
+  ${m==="ders"?'<button class="item" data-all="1" style="display:block;margin-bottom:8px;border-left-color:#ffd43b"><b>Karışık quiz · 40 soru</b><div class="mut">Tüm derslerden rastgele 40 soru</div></button>':""}
+  <div class="list">${Object.keys(D).map(d=>{
+    const ids=idsOf(m,d), ok=ids.filter(i=>sol[i]).length, pct=ids.length?Math.round(ok/ids.length*100):0;
+    return `<button class="item" data-d="${esc(d)}" style="border-left-color:${D[d]}">
+      <div class="row" style="justify-content:space-between"><b>${esc(d)}</b><span class="mut">${ids.length} soru · ${ok} çözüldü</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div></button>`;
+  }).join("")}</div>`;
+  $("#bk").onclick=()=>go("home","home");
+  $("#v").onclick=e=>{const a=e.target.closest("[data-all]");if(a){go(tab,"quiz",m,null,"all");return}const b=e.target.closest("[data-d]");if(b)go(tab,m==="ders"?"dmenu":"konular",m,b.dataset.d)};
+};
+
+/* ---------- konu listesi ---------- */
+V.konular=(tab,m,d)=>{
+  const sol=st.get(solKey(m),{});
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← Dersler</button>
+    <h2 style="margin:0;font-size:1.2em">${esc(d)}</h2>
+  </div>
+  <div class="list">${konular(m,d).map(k=>{
+    const ids=idsOf(m,d,k), ok=ids.filter(i=>sol[i]).length, pct=Math.round(ok/ids.length*100);
+    return `<button class="item" data-k="${esc(k)}" style="border-left-color:${D[d]}">
+      <div class="row" style="justify-content:space-between"><span>${esc(k)}</span><span class="mut">${ids.length} soru · ${ok} çözüldü</span></div>
+      <div class="bar"><i style="width:${pct}%"></i></div></button>`;
+  }).join("")}</div>`;
+  $("#bk").onclick=()=>m==="ders"?go(tab,"dmenu",m,d):go(tab,"subjects",m);
+  $("#v").onclick=e=>{const b=e.target.closest("[data-k]");if(b)go(tab,"konu",m,d,b.dataset.k)};
+};
+
+/* ---------- konu soruları (her açılışta karışık) ---------- */
+V.konu=(tab,m,d,k)=>{
+  const bank=bankOf(m), ids=shuf(idsOf(m,d,k));
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← ${esc(d)}</button>
+    <span class="mut">${esc(k)} · ${ids.length} soru</span>
+  </div>
+  ${m==="ders"&&KONU_OZET[k]?`<div class="box"><b>Konu özeti</b><ul style="margin:8px 0 0;padding-left:20px">${KONU_OZET[k].map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}
+  ${ids.map(i=>qhtml(bank[i],i,1)).join("")}`;
+  $("#bk").onclick=()=>go(tab,"konular",m,d);
+  st.set("last",{tab,m,d,k});
+  bindNotes();
+  answerHandler(m);
+};
+
+function answerHandler(m){
+  $("#v").onclick=e=>{
+    const b=e.target.closest(".opt"), c=e.target.closest("[data-q]");
+    if(!b||!c||c.dataset.done)return;
+    const i=+c.dataset.q, q=bankOf(m)[i], j=+b.dataset.j;
+    c.dataset.done=1;
+    c.querySelectorAll(".opt").forEach((x,k)=>{
+      if(k===q[4])x.classList.add("ok");
+      else if(k===j)x.classList.add("no");
+    });
+    const s=st.get(solKey(m),{}); s[i]=j===q[4]?1:0; st.set(solKey(m),s);
+    track(); feedback(j===q[4]);
+    const p=c.querySelector(".exp");
+    p.classList.remove("hide");
+    p.textContent=(j===q[4]?"Doğru. ":"Yanlış. Doğru cevap "+L[q[4]]+". ")+q[5];
+  };
+}
+
+/* ---------- ders: menü, sınırsız quiz, yanlışlarım ---------- */
+let qz=null;
+
+V.dmenu=(tab,m,d)=>{
+  const wrong=st.get("dwrong",[]).filter(q=>q[0]===d).length;
+  const sol=st.get("dsol",{}), ids=idsOf("ders",d), ok=ids.filter(i=>sol[i]).length;
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← Dersler</button>
+    <h2 style="margin:0;font-size:1.2em">${esc(d)}</h2>
+  </div>
+  <div class="list">
+    <button class="item" data-a="anlatim" style="border-left-color:#ff8a5c"><b>Konu anlatımı</b><div class="mut">Önce konuyu öğren</div></button>
+    <button class="item" data-a="konular" style="border-left-color:#4dabf7"><b>Konu soruları</b><div class="mut">${ids.length} soru · ${ok} çözüldü</div></button>
+    <button class="item" data-a="analiz" style="border-left-color:#51cf66"><b>Konu analizi</b><div class="mut">Hangi konularda zayıfsın</div></button>
+    <button class="item" data-a="export" style="border-left-color:#7c5cff"><b>Yanlışları indir</b><div class="mut">.txt olarak kaydet</div></button>
+    <button class="item" data-a="wrong" style="border-left-color:#ef476f"><b>Yanlışlarım</b><div class="mut">${wrong} soru</div></button>
+  </div>`;
+  $("#bk").onclick=()=>go(tab,"subjects",m);
+  $("#v").onclick=e=>{
+    const b=e.target.closest("[data-a]"); if(!b)return;
+    const a=b.dataset.a;
+    if(a==="konular")go(tab,"konular",m,d);
+    else if(a==="analiz")go(tab,"analiz",m,d);
+    else if(a==="export")exportWrong(d);
+    else if(a==="anlatim")go(tab,"anlatim",m,d);
+    else go(tab,"quiz",m,d,"wrong");
+  };
+};
+
+const QUIZ_N=40;
+V.quiz=(tab,m,d,mode)=>{
+  qz={tab,m,d,mode,list:[],queue:[],i:0,cur:null,score:0,streak:0,best:0,n:0,locked:false,log:[],tl:+st.get("dtime",25)};
+  if(mode==="wrong"){
+    qz.list=st.get("dwrong",[]).filter(q=>!d||q[0]===d);
+    if(!qz.list.length){
+      $("#v").innerHTML=`<div class="box"><p>Yanlışın yok. Önce bir quiz çöz.</p><button class="btn o" id="bk">← Geri</button></div>`;
+      $("#bk").onclick=()=>d?go(tab,"dmenu",m,d):go("home","home");
+      qz=null; return;
+    }
+  } else {
+    qz.queue=shuf(DQN).slice(0,QUIZ_N);
+  }
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:12px">
+    <b>${mode==="wrong"?"Yanlışlarım":"Karışık quiz · "+QUIZ_N+" soru"}</b>
+    <label class="mut" style="margin-left:auto">Süre
+      <select id="tl">${[0,15,25,40].map(s=>`<option value="${s}" ${s===qz.tl?"selected":""}>${s?s+" sn":"Kapalı"}</option>`).join("")}</select>
+    </label>
+  </div>
+  <div id="qarea"></div>
+  <p style="text-align:center;margin-top:12px"><button class="btn o" id="stop">Bitir ve özet</button></p>`;
+  $("#tl").onchange=e=>{qz.tl=+e.target.value; st.set("dtime",qz.tl)};
+  $("#stop").onclick=()=>quizSummary();
+  qz.cur=mode==="wrong"?pickWrong():qz.queue[0];
+  renderQ();
+};
+
+function pickWrong(){return qz.list[Math.floor(Math.random()*qz.list.length)]}
+
+function renderQ(){
+  const q=qz.cur; qz.locked=false;
+  const isQuiz=qz.mode!=="wrong", last=isQuiz&&qz.i===qz.queue.length-1;
+  const prog=isQuiz?`Soru ${qz.i+1} / ${qz.queue.length}`:"Yanlış sorular";
+  $("#qarea").innerHTML=`<div class="box">
+    ${isQuiz?`<div class="bar" style="margin:0 0 10px"><i style="width:${Math.round(qz.i/qz.queue.length*100)}%"></i></div>`:""}
+    <div class="row" style="justify-content:space-between"><span class="tag">${esc(q[0])} · ${esc(q[6])}</span><span class="mut">${prog} · ${qz.score}/${qz.n} doğru · seri ${qz.streak}</span></div>
+    <div style="margin:10px 0"><b>${esc(q[2])}</b></div>
+    ${q[3].map((o,j)=>`<button class="opt" data-j="${j}">${L[j]}) ${esc(o)}</button>`).join("")}
+    ${qz.tl?'<div class="bar" style="margin-top:12px"><i id="ti" style="width:100%"></i></div>':""}
+    <div class="exp hide" id="ex"></div>
+    ${noteBox(q)}
+    <div class="row hide" id="nxr" style="margin-top:10px"><button class="btn" id="nxt">${last?"Bitir":"Sonraki soru"}</button></div>
+  </div>`;
+  document.querySelectorAll("#qarea .opt").forEach(b=>b.onclick=()=>answer(+b.dataset.j));
+  $("#nxt").onclick=nextQ;
+  bindNotes();
+  if(qz.tl){
+    let rem=qz.tl;
+    timer=setInterval(()=>{
+      rem--;
+      const bar=$("#ti"); if(bar)bar.style.width=(rem/qz.tl*100)+"%";
+      if(rem<=0){clearInterval(timer);answer(-1)}
+    },1000);
+  }
+}
+
+function answer(j){
+  if(qz.locked)return;
+  qz.locked=true; clearInterval(timer);
+  const q=qz.cur, ok=j===q[4];
+  qz.n++; qz.log.push({q,ok});
+  track(); feedback(ok);
+  if(ok){
+    qz.score++; qz.streak++; qz.best=Math.max(qz.best,qz.streak);
+    if(qz.mode==="wrong")unwrong(q);
+  } else {
+    qz.streak=0; addWrong(q);
+  }
+  document.querySelectorAll("#qarea .opt").forEach((x,k)=>{
+    if(k===q[4])x.classList.add("ok");
+    else if(k===j)x.classList.add("no");
+  });
+  const ex=$("#ex"); ex.classList.remove("hide");
+  ex.textContent=(ok?"Doğru. ":j===-1?"Süre doldu. Doğru cevap "+L[q[4]]+". ":"Yanlış. Doğru cevap "+L[q[4]]+". ")+q[5];
+  $("#nxr").classList.remove("hide");
+}
+
+function nextQ(){
+  if(qz.mode==="wrong"){
+    if(!qz.list.length){quizSummary();return}
+    qz.cur=pickWrong();
+  } else {
+    if(qz.i>=qz.queue.length-1){quizSummary();return}
+    qz.i++; qz.cur=qz.queue[qz.i];
+  }
+  renderQ();
+}
+
+function quizSummary(){
+  clearInterval(timer);
+  if(!qz)return;
+  const {tab,m,d,mode,n,score,best,log}=qz;
+  const acc=n?Math.round(score/n*100):0;
+  const byD={};
+  log.forEach(x=>{const s=byD[x.q[0]]=byD[x.q[0]]||[0,0]; s[x.ok?0:1]++});
+  const rows=Object.entries(byD).map(([k,s])=>`<p class="mut" style="margin:2px 0">${k}: ${s[0]} doğru, ${s[1]} yanlış</p>`).join("");
+  qz=null;
+  $("#v").innerHTML=`<div class="box">
+    <h2 style="margin-top:0;font-size:1.2em">${mode==="wrong"?"Yanlışlar özeti":"Quiz özeti"}</h2>
+    <div class="big">${score}/${n}</div>
+    <p class="mut">Başarı %${acc} · En uzun seri ${best}</p>
+    ${rows}
+    <div class="row" style="margin-top:12px"><button class="btn" id="again">Yeniden başla</button><button class="btn o" id="back">Ana sayfa</button></div></div>`;
+  $("#again").onclick=()=>go(tab,"quiz",m,d,mode);
+  $("#back").onclick=()=>go("home","home");
+}
+
+function addWrong(q){
+  const w=st.get("dwrong",[]);
+  if(!w.some(x=>x[2]===q[2])){
+    w.unshift([q[0],q[1],q[2],q[3],q[4],q[5],q[6]]);
+    st.set("dwrong",w.slice(0,300));
+  }
+}
+function unwrong(q){
+  st.set("dwrong",st.get("dwrong",[]).filter(x=>x[2]!==q[2]));
+  qz.list=qz.list.filter(x=>x[2]!==q[2]);
+}
+
+/* ---------- konu anlatımı ---------- */
+V.anlatim=(tab,m,d)=>{
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← ${esc(d)}</button>
+    <h2 style="margin:0;font-size:1.2em">Konu anlatımı</h2>
+  </div>
+  <div class="list">${konular(m,d).map(k=>`<button class="item" data-k="${esc(k)}" style="border-left-color:${D[d]}">
+    <b>${esc(k)}</b><div class="mut">${(KONU_ANLATIM[k]||[]).length} bölüm</div></button>`).join("")}</div>`;
+  $("#bk").onclick=()=>go(tab,"dmenu",m,d);
+  $("#v").onclick=e=>{const b=e.target.closest("[data-k]");if(b)go(tab,"lesson",m,d,b.dataset.k)};
+};
+V.lesson=(tab,m,d,k)=>{
+  const paras=KONU_ANLATIM[k]||["Bu konu için anlatım henüz eklenmedi."];
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← Konular</button>
+    <span class="mut">${esc(d)}</span>
+  </div>
+  <div class="box">
+    <h2 style="margin-top:0;font-size:1.25em;color:var(--acc)">${esc(k)}</h2>
+    ${paras.map(p=>`<p style="margin:0 0 12px">${esc(p)}</p>`).join("")}
+  </div>
+  <div class="row"><button class="btn" id="qs">Bu konunun sorularını çöz</button></div>`;
+  $("#bk").onclick=()=>go(tab,"anlatim",m,d);
+  $("#qs").onclick=()=>go(tab,"konu",m,d,k);
+};
+
+/* ---------- konu analizi ---------- */
+V.analiz=(tab,m,d)=>{
+  const sol=st.get("dsol",{}), w=st.get("dwrong",[]);
+  const rows=konular("ders",d).map(k=>{
+    const ids=idsOf("ders",d,k), tried=ids.filter(i=>sol[i]!==undefined), ok=tried.filter(i=>sol[i]===1).length;
+    const wr=w.filter(q=>q[0]===d&&q[6]===k).length;
+    return {k,tried:tried.length,total:ids.length,pct:tried.length?Math.round(ok/tried.length*100):0,wr};
+  }).sort((a,b)=>a.pct-b.pct);
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:14px">
+    <button class="btn o" id="bk">← ${esc(d)}</button>
+    <h2 style="margin:0;font-size:1.2em">Konu analizi</h2>
+  </div>
+  <div class="list">${rows.map(r=>`<div class="box">
+    <div class="row" style="justify-content:space-between"><b>${esc(r.k)}</b><span class="mut">%${r.pct} doğru · ${r.wr} yanlış</span></div>
+    <div class="bar"><i style="width:${r.pct}%;background:${D[d]}"></i></div>
+    <div class="mut" style="font-size:.85em;margin-top:4px">${r.tried}/${r.total} soru çözüldü${r.pct<50&&r.tried?" · önce bu konuya bak":""}</div>
+  </div>`).join("")}</div>`;
+  $("#bk").onclick=()=>go(tab,"dmenu",m,d);
+};
+
+/* ---------- LGS simülesi ---------- */
+V.sim=()=>{
+  $("#v").innerHTML=`<div class="box">
+    <h2 style="margin-top:0;font-size:1.2em">LGS Simülesi</h2>
+    <p class="mut">${SIM_TOTAL} soru · ${SIM_MIN} dakika · Net = Doğru − Yanlış ÷ 3</p>
+    <p class="mut" style="font-size:.9em">Dağılım: ${Object.entries(SIM_COUNT).map(([d,n])=>`${d} ${n}`).join(", ")}. Sorular her seferinde bankadan yeniden seçilir.</p>
+    <button class="btn" id="go">Başla</button></div>`;
+  $("#go").onclick=()=>{
+    const qs=shuf(Object.keys(SIM_COUNT).flatMap(d=>shuf(idsOf("lgs",d)).slice(0,SIM_COUNT[d])));
+    ex={qs:shuf(qs),a:{},i:0,t:SIM_MIN*60};
+    timer=setInterval(()=>{
+      ex.t--;
+      const s=$("#tm"); if(s)s.textContent=fmt(ex.t);
+      if(ex.t<=0)finish();
+    },1000);
+    qview();
+  };
+};
+
+function qview(){
+  const n=ex.qs[ex.i], q=Q[n];
+  $("#v").innerHTML=`
+  <div class="row" style="margin-bottom:10px">
+    <b>Soru ${ex.i+1} / ${ex.qs.length}</b>
+    <b id="tm" style="margin-left:auto">${fmt(ex.t)}</b>
+  </div>
+  ${qhtml(q,n,0)}
+  <div class="row">
+    <button class="btn o" id="pv" ${ex.i?"":"disabled"}>Önceki</button>
+    <button class="btn o" id="nx" ${ex.i<ex.qs.length-1?"":"disabled"}>Sonraki</button>
+    <button class="btn" id="fn" style="margin-left:auto">Bitir</button>
+  </div>`;
+  document.querySelectorAll(".opt").forEach(b=>{
+    if(ex.a[n]===+b.dataset.j)b.classList.add("sel");
+    b.onclick=()=>{ex.a[n]=+b.dataset.j;qview()};
+  });
+  $("#pv").onclick=()=>{ex.i--;qview()};
+  $("#nx").onclick=()=>{ex.i++;qview()};
+  $("#fn").onclick=finish;
+}
+
+function finish(){
+  clearInterval(timer);
+  if(!ex)return;
+  let d=0,y=0,b=0; const by={};
+  ex.qs.forEach(n=>{
+    const q=Q[n], s=by[q[0]]=by[q[0]]||[0,0,0];
+    if(ex.a[n]===undefined){b++;s[2]++}
+    else if(ex.a[n]===q[4]){d++;s[0]++}
+    else{y++;s[1]++}
+  });
+  const net=+(d-y/3).toFixed(2), r=st.get("res",[]);
+  for(let i=0;i<d+y;i++)track();
+  r.push({t:Date.now(),d,y,b,net}); st.set("res",r);
+  $("#v").innerHTML=`<div class="box">
+    <h2 style="margin-top:0">Sonuç</h2>
+    <div class="big">${net} net</div>
+    <p>${d} doğru · ${y} yanlış · ${b} boş</p>
+    ${Object.entries(by).map(([k,s])=>`<p class="mut" style="margin:2px 0">${k}: ${s[0]}D ${s[1]}Y ${s[2]}B → ${(s[0]-s[1]/3).toFixed(1)} net</p>`).join("")}
+    <p><button class="btn" id="again">Yeni simülasyon</button></p></div>`;
+  $("#again").onclick=()=>go("sim","sim");
+  ex=null;
+}
+
+/* ---------- planım ---------- */
+V.plan=()=>renderPlan();
+function renderPlan(){
+  const p=st.get("plan",[]), goal=st.get("goal",20), days=st.get("days",{}), done=days[today()]||0;
+  const pct=Math.min(100,Math.round(done/goal*100)), sound=st.get("sound",1);
+  $("#v").innerHTML=`
+  <div class="box">
+    <div class="row" style="justify-content:space-between"><b>Bugünkü hedef</b><span class="mut">${done}/${goal} soru · seri ${streak()} gün</span></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    ${done>=goal?'<p style="margin:8px 0 0;color:var(--ok);font-weight:600">Bugünkü hedef tamamlandı.</p>':""}
+    <div class="row" style="margin-top:12px">
+      <label class="mut">Günlük hedef <input id="goal" type="number" min="1" max="500" value="${goal}" style="width:90px"></label>
+      <label class="mut" style="margin-left:auto"><input id="snd" type="checkbox" ${sound?"checked":""} style="width:auto"> Ses ve titreşim</label>
+    </div>
+  </div>
+  <div class="row">
+    <input id="pi" placeholder="Bugün ne çalışacaksın?">
+    <button class="btn" id="pa">Ekle</button>
+  </div>
+  <div style="margin-top:16px">${p.map((x,i)=>`
+    <div class="box row">
+      <input type="checkbox" style="flex:none;width:20px;height:20px" data-i="${i}" ${x.d?"checked":""}>
+      <span class="${x.d?"done":""}" style="flex:1">${esc(x.t)}</span>
+      <button class="btn o" data-x="${i}">Sil</button>
+    </div>`).join("")||'<p class="mut">Henüz görev yok.</p>'}
+  </div>`;
+  $("#goal").onchange=e=>{st.set("goal",Math.max(1,+e.target.value||20));renderPlan()};
+  $("#snd").onchange=e=>st.set("sound",e.target.checked?1:0);
+  const add=()=>{const t=$("#pi").value.trim(); if(!t)return; p.unshift({t,d:0}); st.set("plan",p); renderPlan()};
+  $("#pa").onclick=add;
+  $("#pi").onkeydown=e=>{if(e.key==="Enter")add()};
+  $("#v").onclick=e=>{
+    const c=e.target.closest("[data-i]"), x=e.target.closest("[data-x]");
+    if(c){p[c.dataset.i].d=c.checked?1:0; st.set("plan",p); renderPlan()}
+    if(x){p.splice(x.dataset.x,1); st.set("plan",p); renderPlan()}
+  };
+}
+
+// Klavye kısayolları: 1-4 şık, Enter sonraki soru
+document.addEventListener("keydown",e=>{
+  if(!qz||!qz.cur||!$("#qarea")||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
+  if(!qz.locked&&e.key>="1"&&e.key<="4")answer(+e.key-1);
+  else if(qz.locked&&e.key==="Enter")nextQ();
+});
+
+go("home","home");
+</script>
+<script>
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}
+</script>
+</body>
+</html>
